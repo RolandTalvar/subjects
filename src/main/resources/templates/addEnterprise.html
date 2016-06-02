@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Add enterprise</title>
+</head>
+<body>
+<h1>Add enterprise</h1>
+
+<form action="#" th:action="@{/subject/addEnterprise}" method="post">
+    <table>
+        <tr>
+            <td><label><h3>Enterprise details</h3></label></td>
+        </tr>
+        <tr>
+            <td><label>Name</label></td>
+            <td><input type="text" th:field="*{enterprise.name}" /></td>
+        </tr>
+        <tr>
+            <td><label>Full name</label></td>
+            <td><input type="text" th:field="*{enterprise.fullName}" /></td>
+        </tr>
+        <tr>
+            <td><label><h3>Main address</h3></label></td>
+        </tr>
+        <tr>
+            <td><label>Country</label></td>
+            <td><input type="text" th:field="*{address.country}" /></td>
+        </tr>
+        <tr>
+            <td><label>County</label></td>
+            <td><input type="text" th:field="*{address.county}" /></td>
+        </tr>
+        <tr>
+            <td><label>City/town</label></td>
+            <td><input type="text" th:field="*{address.townVillage}" /></td>
+        </tr>
+        <tr>
+            <td><label>Street address</label></td>
+            <td><input type="text" th:field="*{address.streetAddress}" /></td>
+        </tr>
+        <tr>
+            <td><label>Zipcode</label></td>
+            <td><input type="text" th:field="*{address.zipcode}" /></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Submit" /></td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Add person</title>
+    <!--  jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+    <!-- Isolated Version of Bootstrap, not needed if your site already uses Bootstrap -->
+    <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+
+    <!-- Bootstrap Date-Picker Plugin -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+</head>
+<body>
+<h1>Add person</h1>
+
+<form action="#" th:action="@{/subject/addPerson}" method="post">
+    <table>
+        <tr>
+            <td><label><h3>Person details</h3></label></td>
+        </tr>
+        <tr>
+            <td><label>First Name</label></td>
+            <td><input type="text" th:field="*{person.firstName}" /></td>
+        </tr>
+        <tr>
+            <td><label>Last name</label></td>
+            <td><input type="text" th:field="*{person.lastName}" /></td>
+        </tr>
+        <tr>
+            <td><label>Identity code</label></td>
+            <td><input type="text" th:field="*{person.identityCode}" /></td>
+        </tr>
+        <tr>
+            <td><label>Birth Date</label></td>
+            <td><input class="form-control" placeholder="MM/DD/YYY" type="text" th:field="*{person.birthDate}"/></td>
+        </tr>
+        <tr>
+            <td><label><h3>Main address</h3></label></td>
+        </tr>
+        <tr>
+            <td><label>Country</label></td>
+            <td><input type="text" th:field="*{address.country}" /></td>
+        </tr>
+        <tr>
+            <td><label>County</label></td>
+            <td><input type="text" th:field="*{address.county}" /></td>
+        </tr>
+        <tr>
+            <td><label>City/town</label></td>
+            <td><input type="text" th:field="*{address.townVillage}" /></td>
+        </tr>
+        <tr>
+            <td><label>Street address</label></td>
+            <td><input type="text" th:field="*{address.streetAddress}" /></td>
+        </tr>
+        <tr>
+            <td><label>Zipcode</label></td>
+            <td><input type="text" th:field="*{address.zipcode}" /></td>
+        </tr>
+
+        <tr>
+            <td><input type="submit" value="Submit" /></td>
+        </tr>
+    </table>
+</form>
+
+
+<script th:inline="javascript">
+
+    /*<![CDATA[*/
+
+    $(document).ready(function(){
+        var date_input=$('input[name="birthDate"]');
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        var options={
+            format: 'mm/dd/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        };
+        date_input.datepicker(options);
+    })
+
+    /*]]>*/
+</script>
+
+</body>
+</html>
