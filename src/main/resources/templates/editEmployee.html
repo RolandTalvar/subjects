@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Add person</title>
+    <title>Edit employee</title>
+
     <!--  jQuery -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
@@ -13,12 +14,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 </head>
 <body>
-<h1>Add person</h1>
+<h1>Edit employee</h1>
 
-<form action="#" th:action="@{/subject/addPerson}" method="post">
+<form action="#" th:action="@{/subject/editEmployee}" method="post">
     <table>
         <tr>
-            <td><label><h3>Person details</h3></label></td>
+            <td><h3><label>Employee details</label></h3></td>
         </tr>
         <tr>
             <td><label>First Name</label></td>
@@ -36,6 +37,20 @@
             <td><label>Birth Date</label></td>
             <td><input class="form-control" placeholder="yyyy-mm-dd" type="text" th:field="*{person.birthDate}"/></td>
         </tr>
+
+        <tr>
+            <td><label>Enterprise</label></td>
+            <td><select name="selectedEnterprise">
+                <option th:each="enterprise : ${enterprises}" th:value="${enterprise.enterprise}" th:text="${enterprise.name}" th:selected="${enterprise.enterprise == employee.enterpriseFk}" >Enterprise</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td><label>Structure unit</label></td>
+            <td><select name="selectedStructUnit">
+                <option th:each="structUnit : ${structUnits}" th:value="${structUnit.structUnit}" th:text="${structUnit.name}" th:selected="${structUnit.structUnit == employee.structUnitFk}">Structure unit</option>
+            </select></td>
+        </tr>
+
         <tr>
             <td><label><h3>Main address</h3></label></td>
         </tr>
@@ -85,6 +100,7 @@
 
     /*]]>*/
 </script>
+
 
 </body>
 </html>

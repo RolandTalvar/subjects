@@ -16,7 +16,7 @@ public class Person {
     private String firstName;
     private String lastName;
     private String identityCode;
-    private Date birthDate;
+    private java.sql.Date birthDate;
     private Long createdBy;
     private Long updatedBy;
     private Date created;
@@ -54,11 +54,11 @@ public class Person {
         this.identityCode = identityCode;
     }
 
-    public Date getBirthDate() {
+    public java.sql.Date getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(java.sql.Date birthDate) {
         this.birthDate = birthDate;
     }
 

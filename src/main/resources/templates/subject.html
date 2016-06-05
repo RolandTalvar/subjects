@@ -6,7 +6,7 @@
 <body>
 <h1>Add subject</h1>
 
-<p>Please select the subject type:</p>
+<p>Please select the subject type to add:</p>
 
 <form action="#" th:action="@{/subject/add}" th:object="${subjectType}" method="post">
         <select th:field="*{subjectType}">

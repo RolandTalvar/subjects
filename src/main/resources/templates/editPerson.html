@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Add person</title>
+    <title>Edit person</title>
     <!--  jQuery -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
@@ -13,13 +13,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 </head>
 <body>
-<h1>Add person</h1>
+<h1>Edit person</h1>
 
-<form action="#" th:action="@{/subject/addPerson}" method="post">
+<form action="#" th:action="@{/subject/editPerson}" method="post">
     <table>
         <tr>
             <td><label><h3>Person details</h3></label></td>
         </tr>
+
         <tr>
             <td><label>First Name</label></td>
             <td><input type="text" th:field="*{person.firstName}" /></td>
@@ -36,9 +37,11 @@
             <td><label>Birth Date</label></td>
             <td><input class="form-control" placeholder="yyyy-mm-dd" type="text" th:field="*{person.birthDate}"/></td>
         </tr>
+
         <tr>
             <td><label><h3>Main address</h3></label></td>
         </tr>
+
         <tr>
             <td><label>Country</label></td>
             <td><input type="text" th:field="*{address.country}" /></td>
@@ -61,8 +64,20 @@
         </tr>
 
         <tr>
+            <td><label><h3>Person attributes</h3></label></td>
+        </tr>
+
+        <tr>
+            <td><label>Customer</label></td>
+            <td><input type="checkbox" th:name="${isCustomer}? '' : 'isCustomer'" th:checked="*{isCustomer}" th:disabled="${isCustomer}"/></td>
+        </tr>
+
+        <tr>
             <td><input type="submit" value="Submit" /></td>
         </tr>
+
+
+
     </table>
 </form>
 

@@ -81,7 +81,7 @@ public class AddSubjectController {
 
         addressRepository.save(address);
 
-        return "addPerson";
+        return "redirect:/subject/editPerson?id=" + person.getPerson();
 
 
     }
@@ -108,7 +108,7 @@ public class AddSubjectController {
 
         addressRepository.save(address);
 
-        return "addEnterprise";
+        return "redirect:/subject/editEnterprise?id=" + enterprise.getEnterprise();
 
 
     }
@@ -144,13 +144,13 @@ public class AddSubjectController {
 
         employeeRepository.save(employee);
 
-        address.setSubjectFk(person.getPerson());
+        address.setSubjectFk(employee.getEmployee());
         address.setSubjectTypeFk(3L);
         address.setAddressTypeFk(1L);
 
         addressRepository.save(address);
 
-        return "addEmployee";
+        return "redirect:/subject/editEmployee?id=" + employee.getEmployee();
 
 
     }

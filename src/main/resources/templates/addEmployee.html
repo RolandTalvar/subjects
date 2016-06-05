@@ -35,7 +35,7 @@
         </tr>
         <tr>
             <td><label>Birth Date</label></td>
-            <td><input class="form-control" placeholder="MM/DD/YYY" type="text" th:field="*{person.birthDate}"/></td>
+            <td><input class="form-control" placeholder="yyyy-mm-dd" type="text" th:field="*{person.birthDate}"/></td>
         </tr>
 
         <tr>
@@ -90,7 +90,7 @@
         var date_input=$('input[name="birthDate"]');
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
         var options={
-            format: 'mm/dd/yyyy',
+            format: 'yyyy-mm-dd',
             container: container,
             todayHighlight: true,
             autoclose: true,

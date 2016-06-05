@@ -1,7 +1,6 @@
 package com.miinaroland.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by rolandtalvar on 02/06/16.
@@ -10,6 +9,8 @@ import javax.persistence.Id;
 public class Customer {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_id")
+    @SequenceGenerator(name="customer_id", sequenceName="customer_id", allocationSize=1)
     private long customer;
     private Long subjectTypeFk;
     private Long subjectFk;
