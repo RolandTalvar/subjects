@@ -1,7 +1,6 @@
 package com.miinaroland.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by rolandtalvar on 02/06/16.
@@ -11,6 +10,8 @@ import javax.persistence.Id;
 public class Employee {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employee_id")
+    @SequenceGenerator(name="employee_id", sequenceName="employee_id", allocationSize=1)
     private long employee;
     private Long structUnitFk;
     private Long enterpriseFk;

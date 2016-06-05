@@ -1,7 +1,6 @@
 package com.miinaroland.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -11,6 +10,8 @@ import java.util.Date;
 public class Enterprise {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "enterprise_id")
+    @SequenceGenerator(name="enterprise_id", sequenceName="enterprise_id", allocationSize=1)
     private long enterprise;
     private String name;
     private String fullName;

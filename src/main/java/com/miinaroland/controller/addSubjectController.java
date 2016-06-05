@@ -1,7 +1,7 @@
 package com.miinaroland.controller;
 
 import com.miinaroland.model.*;
-import com.miinaroland.repository.SubjectTypeRepository;
+import com.miinaroland.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,10 +16,25 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/subject")
-public class SubjectController {
+public class AddSubjectController {
 
     @Autowired
     SubjectTypeRepository subjectTypeRepository;
+
+    @Autowired
+    PersonRepository personRepository;
+
+    @Autowired
+    EnterpriseRepository enterpriseRepository;
+
+    @Autowired
+    EmployeeRepository employeeRepository;
+
+    @Autowired
+    AddressRepository addressRepository;
+
+    @Autowired
+    StructUnitRepository structUnitRepository;
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String getSubjectAddForm(@ModelAttribute SubjectType subjectType, Model model) {
@@ -38,8 +53,6 @@ public class SubjectController {
                 return "redirect:/subject/addEnterprise";
             case 3:
                 return "redirect:/subject/addEmployee";
-            case 4:
-                return "redirect:/subject/addCustomer";
             default:
                 return "subject";
         }
@@ -57,9 +70,17 @@ public class SubjectController {
     @RequestMapping(value = "/addPerson", method = RequestMethod.POST)
     public String postPersonAddForm(@ModelAttribute Person person, @ModelAttribute Address address) {
 
+        person.setCreated(new java.sql.Timestamp(new java.util.Date().getTime()));
+        person.setUpdated(new java.sql.Timestamp(new java.util.Date().getTime()));
+
+        personRepository.save(person);
+
         address.setSubjectFk(person.getPerson());
         address.setSubjectTypeFk(1L);
         address.setAddressTypeFk(1L);
+
+        addressRepository.save(address);
+
         return "addPerson";
 
 
@@ -76,16 +97,31 @@ public class SubjectController {
     @RequestMapping(value = "/addEnterprise", method = RequestMethod.POST)
     public String postEnterpriseAddForm(@ModelAttribute Enterprise enterprise, @ModelAttribute Address address) {
 
+        enterprise.setCreated(new java.sql.Timestamp(new java.util.Date().getTime()));
+        enterprise.setUpdated(new java.sql.Timestamp(new java.util.Date().getTime()));
+
+        enterpriseRepository.save(enterprise);
+
         address.setSubjectFk(enterprise.getEnterprise());
         address.setSubjectTypeFk(2L);
         address.setAddressTypeFk(3L);
+
+        addressRepository.save(address);
+
         return "addEnterprise";
 
 
     }
 
     @RequestMapping(value = "/addEmployee", method = RequestMethod.GET)
-    public String getEmployeeAddForm(@ModelAttribute Employee employee) {
+    public String getEmployeeAddForm(@ModelAttribute Person person, @ModelAttribute Employee employee, @ModelAttribute Address address,
+                                     @ModelAttribute Enterprise enterprise, @ModelAttribute StructUnit structUnit, Model model) {
+
+        List<Enterprise> enterprises = enterpriseRepository.findAll();
+        model.addAttribute("enterprises", enterprises);
+
+        List<StructUnit> structUnits = structUnitRepository.findAll();
+        model.addAttribute("structUnits", structUnits);
 
         return "addEmployee";
 
@@ -93,25 +129,28 @@ public class SubjectController {
     }
 
     @RequestMapping(value = "/addEmployee", method = RequestMethod.POST)
-    public String postEmployeeAddForm(@ModelAttribute Employee employee) {
+    public String postEmployeeAddForm(@ModelAttribute Person person, @ModelAttribute Employee employee, @ModelAttribute Address address,
+                                      @ModelAttribute Enterprise enterprise, @ModelAttribute StructUnit structUnit) {
+
+        person.setCreated(new java.sql.Timestamp(new java.util.Date().getTime()));
+        person.setUpdated(new java.sql.Timestamp(new java.util.Date().getTime()));
+
+        personRepository.save(person);
+
+        employee.setStructUnitFk(structUnit.getStructUnit());
+        employee.setEnterpriseFk(enterprise.getEnterprise());
+        employee.setPersonFk(person.getPerson());
+        employee.setActive("Y");
+
+        employeeRepository.save(employee);
+
+        address.setSubjectFk(person.getPerson());
+        address.setSubjectTypeFk(3L);
+        address.setAddressTypeFk(1L);
+
+        addressRepository.save(address);
 
         return "addEmployee";
-
-
-    }
-
-    @RequestMapping(value = "/addCustomer", method = RequestMethod.GET)
-    public String getCustomerAddForm(@ModelAttribute Customer customer) {
-
-        return "addCustomer";
-
-
-    }
-
-    @RequestMapping(value = "/addCustomer", method = RequestMethod.POST)
-    public String postCustomerAddForm(@ModelAttribute Customer customer) {
-
-        return "addCustomer";
 
 
     }

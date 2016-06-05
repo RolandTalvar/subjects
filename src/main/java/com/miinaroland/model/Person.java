@@ -1,7 +1,6 @@
 package com.miinaroland.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -11,6 +10,8 @@ import java.util.Date;
 public class Person {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "person_id")
+    @SequenceGenerator(name="person_id", sequenceName="person_id", allocationSize=1)
     private long person;
     private String firstName;
     private String lastName;
