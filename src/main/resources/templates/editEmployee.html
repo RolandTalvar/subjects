@@ -78,8 +78,13 @@
             <td><a th:href="@{/subject/additionalEmployeeAddresses(id=${employee.employee})}">Additional addresses</a></td>
         </tr>
 
+        <div th:replace="fragments/contacts :: contacts"></div>
         <tr>
-            <td><input type="submit" value="Submit" /></td>
+            <td><a th:href="@{/subject/addNewEmployeeContact(id=${employee.employee})}">Add new contact</a></td>
+        </tr>
+
+        <tr>
+            <td><p> <input type="submit" value="Submit" /> </p></td>
         </tr>
     </table>
 </form>

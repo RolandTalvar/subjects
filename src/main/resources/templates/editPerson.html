@@ -66,6 +66,11 @@
             <td><a th:href="@{/subject/additionalPersonAddresses(id=${person.person})}">Additional addresses</a></td>
         </tr>
 
+        <div th:replace="fragments/contacts :: contacts"></div>
+        <tr>
+            <td><a th:href="@{/subject/addNewPersonContact(id=${person.person})}">Add new contact</a></td>
+        </tr>
+
         <tr>
             <td><label><h3>Person attributes</h3></label></td>
         </tr>
@@ -76,10 +81,8 @@
         </tr>
 
         <tr>
-            <td><input type="submit" value="Submit" /></td>
+            <td><p> <input type="submit" value="Submit" /> </p></td>
         </tr>
-
-
 
     </table>
 </form>

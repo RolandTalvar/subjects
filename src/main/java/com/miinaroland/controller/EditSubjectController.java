@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/subject")
-@SessionAttributes({"person", "address", "enterprise", "employee"})
+@SessionAttributes({"person", "address", "enterprise", "employee", "contactListWrapper"})
 public class EditSubjectController {
 
     @Autowired
@@ -38,6 +38,13 @@ public class EditSubjectController {
     @Autowired
     CustomerRepository customerRepository;
 
+    @Autowired
+    ContactDAO contactDAO;
+
+    @Autowired
+    ContactTypeDAO contactTypeDAO;
+
+
     @RequestMapping(value = "/editPerson", method = RequestMethod.GET, params = "id")
     public String getPersonEditForm(@RequestParam("id") long id, Model model) {
 
@@ -45,6 +52,9 @@ public class EditSubjectController {
         model.addAttribute(person);
 
         Address address = addressRepository.findBySubjectTypeFkAndSubjectFkAndAddressTypeFk(1L, id, 1L);
+        if (address == null) {
+            address = new Address();
+        }
         model.addAttribute(address);
 
         Customer customer = customerRepository.findBySubjectFkAndSubjectTypeFk(id, 1L);
@@ -58,12 +68,25 @@ public class EditSubjectController {
 
         model.addAttribute("isCustomer", isCustomer);
 
+        List<Contact> contacts = contactDAO.findAll(1L, id);
+        ContactListWrapper contactListWrapper = new ContactListWrapper();
+        contactListWrapper.setContactList(contacts);
+        model.addAttribute(contactListWrapper);
+
+        List<ContactType> contactTypes = contactTypeDAO.findAll();
+        ContactTypeListWrapper contactTypeListWrapper = new ContactTypeListWrapper();
+        contactTypeListWrapper.setContactTypeList(contactTypes);
+        model.addAttribute(contactTypeListWrapper);
+
         return "editPerson";
 
     }
 
     @RequestMapping(value = "/editPerson", method = RequestMethod.POST)
-    public String postPersonEditForm(@ModelAttribute("person") Person person, @ModelAttribute("address") Address address, @RequestParam(required = false, value = "isCustomer") boolean isCustomer) {
+    public String postPersonEditForm(@ModelAttribute("person") Person person,
+                                     @ModelAttribute("address") Address address,
+                                     @ModelAttribute("contactListWrapper") ContactListWrapper contactListWrapper,
+                                     @RequestParam(required = false, value = "isCustomer") boolean isCustomer) {
 
         person.setUpdated(new java.sql.Timestamp(new java.util.Date().getTime()));
 
@@ -78,6 +101,10 @@ public class EditSubjectController {
             customerRepository.save(customer);
         }
 
+        for (Contact contact: contactListWrapper.getContactList()) {
+            contactDAO.insertOrUpdate(contact);
+        }
+
         return "redirect:/subject/editPerson?id=" + person.getPerson();
 
 
@@ -90,6 +117,9 @@ public class EditSubjectController {
         model.addAttribute(enterprise);
 
         Address address = addressRepository.findBySubjectTypeFkAndSubjectFkAndAddressTypeFk(2L, id, 3L);
+        if (address == null) {
+            address = new Address();
+        }
         model.addAttribute(address);
 
         Customer customer = customerRepository.findBySubjectFkAndSubjectTypeFk(id, 2L);
@@ -103,13 +133,26 @@ public class EditSubjectController {
 
         model.addAttribute("isCustomer", isCustomer);
 
+        List<Contact> contacts = contactDAO.findAll(2L, id);
+        ContactListWrapper contactListWrapper = new ContactListWrapper();
+        contactListWrapper.setContactList(contacts);
+        model.addAttribute(contactListWrapper);
+
+        List<ContactType> contactTypes = contactTypeDAO.findAll();
+        ContactTypeListWrapper contactTypeListWrapper = new ContactTypeListWrapper();
+        contactTypeListWrapper.setContactTypeList(contactTypes);
+        model.addAttribute(contactTypeListWrapper);
+
         return "editEnterprise";
 
 
     }
 
     @RequestMapping(value = "/editEnterprise", method = RequestMethod.POST)
-    public String postEnterpriseEditForm(@ModelAttribute("enterprise") Enterprise enterprise, @ModelAttribute("address") Address address, @RequestParam(required = false, value = "isCustomer") boolean isCustomer) {
+    public String postEnterpriseEditForm(@ModelAttribute("enterprise") Enterprise enterprise,
+                                         @ModelAttribute("address") Address address,
+                                         @ModelAttribute("contactListWrapper") ContactListWrapper contactListWrapper,
+                                         @RequestParam(required = false, value = "isCustomer") boolean isCustomer) {
 
         enterprise.setUpdated(new java.sql.Timestamp(new java.util.Date().getTime()));
 
@@ -122,6 +165,10 @@ public class EditSubjectController {
             customer.setSubjectFk(enterprise.getEnterprise());
             customer.setSubjectTypeFk(2L);
             customerRepository.save(customer);
+        }
+
+        for (Contact contact: contactListWrapper.getContactList()) {
+            contactDAO.insertOrUpdate(contact);
         }
 
         return "redirect:/subject/editEnterprise?id=" + enterprise.getEnterprise();
@@ -139,6 +186,9 @@ public class EditSubjectController {
         model.addAttribute(person);
 
         Address address = addressRepository.findBySubjectTypeFkAndSubjectFkAndAddressTypeFk(3L, id, 1L);
+        if (address == null) {
+            address = new Address();
+        }
         model.addAttribute(address);
 
         List<Enterprise> enterprises = enterpriseRepository.findAll();
@@ -146,6 +196,16 @@ public class EditSubjectController {
 
         List<StructUnit> structUnits = structUnitRepository.findByEnterpriseFk(employee.getEnterpriseFk());
         model.addAttribute("structUnits", structUnits);
+
+        List<Contact> contacts = contactDAO.findAll(3L, id);
+        ContactListWrapper contactListWrapper = new ContactListWrapper();
+        contactListWrapper.setContactList(contacts);
+        model.addAttribute(contactListWrapper);
+
+        List<ContactType> contactTypes = contactTypeDAO.findAll();
+        ContactTypeListWrapper contactTypeListWrapper = new ContactTypeListWrapper();
+        contactTypeListWrapper.setContactTypeList(contactTypes);
+        model.addAttribute(contactTypeListWrapper);
 
         return "editEmployee";
 
@@ -156,6 +216,7 @@ public class EditSubjectController {
     public String postEmployeeEditForm(@ModelAttribute("person") Person person,
                                        @ModelAttribute("employee") Employee employee,
                                        @ModelAttribute("address") Address address,
+                                       @ModelAttribute("contactListWrapper") ContactListWrapper contactListWrapper,
                                        @RequestParam(required = false, value = "selectedEnterprise") Long selectedEnterprise,
                                        @RequestParam(required = false, value = "selectedStructUnit") Long selectedStructUnit) {
 
@@ -174,8 +235,12 @@ public class EditSubjectController {
 
         addressRepository.save(address);
 
+        for (Contact contact: contactListWrapper.getContactList()) {
+            contactDAO.insertOrUpdate(contact);
+        }
+
         return "redirect:/subject/editEmployee?id=" + employee.getEmployee();
 
-
     }
+
 }

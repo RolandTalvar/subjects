@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Contacts</title>
+
+</head>
+<body>
+<h1>Contacts</h1>
+
+    <table>
+
+        <div th:fragment="contacts">
+            <tr>
+                <td><label><h3>Contacts</h3></label></td>
+            </tr>
+            <tr th:each="contact, stat : ${contactListWrapper.contactList}" >
+                <td>
+                    <select th:field="${contactListWrapper.contactList[__${stat.index}__].contactTypeFk}">
+                        <div>
+                        <option th:each="contactType, typeStat : ${contactTypeListWrapper.contactTypeList}"
+                                th:object="${contactTypeListWrapper.contactTypeList[__${typeStat.index}__]}"
+                                th:attr="typeFromContact=${contactListWrapper.contactList[__${stat.index}__].contactTypeFk}, currentType=*{contactType}"
+                                th:value="*{contactType}" th:text="*{typeName}"
+                                th:selected="${contactListWrapper.contactList[__${stat.index}__].contactTypeFk} == *{contactType}"></option>
+                        </div>
+                    </select>
+                </td>
+
+                <td><input type="text" th:field="*{contactListWrapper.contactList[__${stat.index}__].valueText}" /></td>
+                <td><input type="text" th:field="*{contactListWrapper.contactList[__${stat.index}__].note}" /></td>
+            </tr>
+        </div>
+
+    </table>
+
+</body>
+</html>

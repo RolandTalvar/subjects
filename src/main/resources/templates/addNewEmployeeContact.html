@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Add new employee contact</title>
+</head>
+<body>
+<h1>Add new employee contact</h1>
+
+<a th:href="@{/subject/editEmployee(id=${employee.employee})}"><h3 th:text="${person.firstName} + '  ' + ${person.lastName}"></h3></a>
+
+<form action="#" th:action="@{/subject/addNewEmployeeContact}" method="post">
+    <table>
+
+        <tr>
+            <td><label>Contact type</label></td>
+            <td>
+                <select th:field="${contact.contactTypeFk}">
+                    <div>
+                        <option th:each="contactType, typeStat : ${contactTypeListWrapper.contactTypeList}"
+                                th:object="${contactTypeListWrapper.contactTypeList[__${typeStat.index}__]}"
+                                th:value="*{contactType}" th:text="*{typeName}"></option>
+                    </div>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label>Contact value</label></td>
+            <td><input type="text" th:field="*{contact.valueText}" /></td>
+        </tr>
+        <tr>
+            <td><label>Contact note</label></td>
+            <td><input type="text" th:field="*{contact.note}" /></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Submit" /></td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+CREATE FUNCTION insertOrUpdateContact(_contact numeric, _subject_fk numeric, _contact_type_fk numeric, _value_text text, _orderby numeric, _subject_type_fk numeric, _note text)
+  RETURNS void AS
+  $BODY$
+      BEGIN
+          LOOP
+            UPDATE contact SET subject_fk = _subject_fk, contact_type_fk = _contact_type_fk, value_text = _value_text, orderby = _orderby , subject_type_fk = _subject_type_fk, note = _note WHERE contact = _contact;
+            IF found THEN
+                RETURN;
+            END IF;
+            BEGIN
+                INSERT INTO contact(contact, subject_fk, contact_type_fk, value_text, orderby, subject_type_fk, note)
+                VALUES(_contact, _subject_fk, _contact_type_fk, _value_text, _orderby, _subject_type_fk, _note);
+                RETURN;
+                EXCEPTION WHEN unique_violation THEN
+                    -- do nothing, and loop to try the UPDATE again
+            END;
+        END LOOP;
+      END;
+  $BODY$
+  LANGUAGE 'plpgsql' VOLATILE
+  COST 100;

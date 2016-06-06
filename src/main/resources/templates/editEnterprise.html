@@ -49,6 +49,11 @@
             <td><a th:href="@{/subject/additionalEnterpriseAddresses(id=${enterprise.enterprise})}">Additional addresses</a></td>
         </tr>
 
+        <div th:replace="fragments/contacts :: contacts"></div>
+        <tr>
+            <td><a th:href="@{/subject/addNewEnterpriseContact(id=${enterprise.enterprise})}">Add new contact</a></td>
+        </tr>
+
         <tr>
             <td><label><h3>Enterprise attributes</h3></label></td>
         </tr>
@@ -59,7 +64,7 @@
         </tr>
 
         <tr>
-            <td><input type="submit" value="Submit" /></td>
+            <td><p> <input type="submit" value="Submit" /> </p></td>
         </tr>
     </table>
 </form>
