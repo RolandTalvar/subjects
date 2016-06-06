@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Add additional enterprise address</title>
+</head>
+<body>
+<h1>Add additional enterprise address</h1>
+
+<a th:href="@{/subject/editEnterprise(id=${enterprise.enterprise})}"><h3 th:text="${enterprise.name}"></h3></a>
+
+<form action="#" th:action="@{/subject/addAdditionalEnterpriseAddress}" method="post">
+    <table>
+
+        <tr>
+            <td><label>Country</label></td>
+            <td><input type="text" th:field="*{address.country}" /></td>
+        </tr>
+        <tr>
+            <td><label>County</label></td>
+            <td><input type="text" th:field="*{address.county}" /></td>
+        </tr>
+        <tr>
+            <td><label>City/town</label></td>
+            <td><input type="text" th:field="*{address.townVillage}" /></td>
+        </tr>
+        <tr>
+            <td><label>Street address</label></td>
+            <td><input type="text" th:field="*{address.streetAddress}" /></td>
+        </tr>
+        <tr>
+            <td><label>Zipcode</label></td>
+            <td><input type="text" th:field="*{address.zipcode}" /></td>
+        </tr>
+
+        <tr>
+            <td><input type="button" onclick="history.back();" value="Back" /></td>
+            <td><input type="submit" value="Save" /></td>
+        </tr>
+
+    </table>
+</form>
+
+</body>
+</html>

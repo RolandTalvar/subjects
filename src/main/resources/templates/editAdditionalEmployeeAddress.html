@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Edit additional employee address</title>
+</head>
+<body>
+<h1>Edit additional employee address</h1>
+
+<a th:href="@{/subject/editEmployee(id=${employee.employee})}"><h3 th:text="${person.firstName} + '  ' + ${person.lastName}"></h3></a>
+
+<form action="#" th:action="@{/subject/editAdditionalEmployeeAddress}" method="post">
+    <table>
+
+        <tr>
+            <td><label>Country</label></td>
+            <td><input type="text" th:field="*{address.country}" /></td>
+        </tr>
+        <tr>
+            <td><label>County</label></td>
+            <td><input type="text" th:field="*{address.county}" /></td>
+        </tr>
+        <tr>
+            <td><label>City/town</label></td>
+            <td><input type="text" th:field="*{address.townVillage}" /></td>
+        </tr>
+        <tr>
+            <td><label>Street address</label></td>
+            <td><input type="text" th:field="*{address.streetAddress}" /></td>
+        </tr>
+        <tr>
+            <td><label>Zipcode</label></td>
+            <td><input type="text" th:field="*{address.zipcode}" /></td>
+        </tr>
+
+        <tr>
+            <td><input type="button" onclick="history.back();" value="Back" /></td>
+            <td><input type="submit" value="Save" /></td>
+        </tr>
+
+    </table>
+</form>
+
+</body>
+</html>

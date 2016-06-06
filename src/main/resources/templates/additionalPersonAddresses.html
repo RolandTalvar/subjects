@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Additional person addresses</title>
+</head>
+<body>
+<h1>Additional person addresses</h1>
+
+<a th:href="@{/subject/editPerson(id=${person.person})}"><h3 th:text="${person.firstName} + '  ' + ${person.lastName}"></h3></a>
+
+<table>
+    <tr>
+        <th>Country</th>
+        <th>County</th>
+        <th>City/town</th>
+        <th>Street address</th>
+        <th>Zipcode</th>
+    </tr>
+    <tr th:each="address : ${addressList}">
+        <td th:text="*{address.country}" ></td>
+        <td th:text="*{address.county}" ></td>
+        <td th:text="*{address.townVillage}" ></td>
+        <td th:text="*{address.streetAddress}" ></td>
+        <td th:text="*{address.zipcode}" ></td>
+        <td><a th:href="@{/subject/editAdditionalPersonAddress(id=${address.address})}">Edit address</a></td>
+        <td><a th:href="@{/subject/changeToMainPersonAddress(id=${address.address})}">Change to main address</a></td>
+    </tr>
+
+</table>
+
+<p><a th:href="@{/subject/addAdditionalPersonAddress}">Add new additional address</a></p>
+
+
+</body>
+</html>

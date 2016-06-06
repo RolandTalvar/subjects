@@ -74,6 +74,9 @@
             <td><label>Zipcode</label></td>
             <td><input type="text" th:field="*{address.zipcode}" /></td>
         </tr>
+        <tr>
+            <td><a th:href="@{/subject/additionalEmployeeAddresses(id=${employee.employee})}">Additional addresses</a></td>
+        </tr>
 
         <tr>
             <td><input type="submit" value="Submit" /></td>

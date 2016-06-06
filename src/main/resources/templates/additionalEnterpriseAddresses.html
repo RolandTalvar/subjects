@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Additional enterprise addresses</title>
+</head>
+<body>
+<h1>Additional enterprise addresses</h1>
+
+<a th:href="@{/subject/editEnterprise(id=${enterprise.enterprise})}"><h3 th:text="${enterprise.name}"></h3></a>
+
+<table>
+    <tr>
+        <th>Country</th>
+        <th>County</th>
+        <th>City/town</th>
+        <th>Street address</th>
+        <th>Zipcode</th>
+    </tr>
+    <tr th:each="address : ${addressList}">
+        <td th:text="*{address.country}" ></td>
+        <td th:text="*{address.county}" ></td>
+        <td th:text="*{address.townVillage}" ></td>
+        <td th:text="*{address.streetAddress}" ></td>
+        <td th:text="*{address.zipcode}" ></td>
+        <td><a th:href="@{/subject/editAdditionalEnterpriseAddress(id=${address.address})}">Edit address</a></td>
+        <td><a th:href="@{/subject/changeToMainEnterpriseAddress(id=${address.address})}">Change to main address</a></td>
+    </tr>
+
+</table>
+
+<p><a th:href="@{/subject/addAdditionalEnterpriseAddress}">Add new additional address</a></p>
+
+
+</body>
+</html>

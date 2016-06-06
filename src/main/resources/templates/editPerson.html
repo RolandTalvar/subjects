@@ -62,6 +62,9 @@
             <td><label>Zipcode</label></td>
             <td><input type="text" th:field="*{address.zipcode}" /></td>
         </tr>
+        <tr>
+            <td><a th:href="@{/subject/additionalPersonAddresses(id=${person.person})}">Additional addresses</a></td>
+        </tr>
 
         <tr>
             <td><label><h3>Person attributes</h3></label></td>
