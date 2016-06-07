@@ -1,5 +1,7 @@
 package com.miinaroland.controller;
 
+import com.miinaroland.dao.ContactDAO;
+import com.miinaroland.dao.ContactTypeDAO;
 import com.miinaroland.model.*;
 import com.miinaroland.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;

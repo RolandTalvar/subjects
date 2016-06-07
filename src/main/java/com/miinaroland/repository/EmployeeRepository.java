@@ -9,4 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     Employee findByEmployee(long employee);
+    Employee findByPersonFk(long personFk);
 }

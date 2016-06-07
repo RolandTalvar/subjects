@@ -1,4 +1,4 @@
-package com.miinaroland.repository;
+package com.miinaroland.dao;
 
 import com.miinaroland.model.Contact;
 import org.springframework.stereotype.Repository;

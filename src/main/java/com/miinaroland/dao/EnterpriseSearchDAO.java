@@ -1,6 +1,8 @@
-package com.miinaroland.repository;
+package com.miinaroland.dao;
 
-import com.miinaroland.model.ContactType;
+import com.miinaroland.model.Enterprise;
+import com.miinaroland.model.Person;
+import com.sun.tools.javac.comp.Enter;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -11,7 +13,7 @@ import java.util.List;
  * Created by rolandtalvar on 06/06/16.
  */
 @Repository
-public class ContactTypeDAO {
+public class EnterpriseSearchDAO {
 
     static final String JDBC_DRIVER = "org.postgresql.Driver";
     static final String DB_URL = "jdbc:postgresql://localhost:5432/dkf6fokg3qu1e";
@@ -19,10 +21,10 @@ public class ContactTypeDAO {
     static final String USER = "xeaizttgmawsfi";
     static final String PASS = "YaUL6jwiwodWgre75rugIUyRac";
 
-    List<ContactType> contactTypes;
+    List<Enterprise> enterpriseList;
 
-    public List<ContactType> findAll() {
-        contactTypes = new ArrayList<>();
+    public List<Enterprise> search(String name, String fullName) {
+        enterpriseList = new ArrayList<>();
 
         Connection connection = null;
         Statement statement = null;
@@ -33,16 +35,31 @@ public class ContactTypeDAO {
 
             statement = connection.createStatement();
             String sql;
-            sql = "SELECT contact_type, type_name FROM contact_type;";
+            sql = "SELECT * FROM enterprise WHERE ";
+            if (name != null) {
+                sql = sql.concat(" UPPER(name) LIKE UPPER('" + name + "%') AND ");
+            }
+            if (fullName != null) {
+                sql = sql.concat(" UPPER(full_name) LIKE UPPER('" + fullName + "%') AND ");
+            }
+
+            if (sql.endsWith("AND ")) {
+                sql = sql.substring(0, sql.length() - 4);
+            }
+
+            sql = sql.concat(";");
+
+
             ResultSet rs = statement.executeQuery(sql);
 
             while (rs.next()){
-                ContactType contactType = new ContactType();
+                Enterprise enterprise = new Enterprise();
 
-                contactType.setContactType(rs.getLong("contact_type"));
-                contactType.setTypeName(rs.getString("type_name"));
+                enterprise.setEnterprise(rs.getLong("enterprise"));
+                enterprise.setName(rs.getString("name"));
+                enterprise.setFullName(rs.getString("full_name"));
 
-                contactTypes.add(contactType);
+                enterpriseList.add(enterprise);
 
             }
 
@@ -72,7 +89,7 @@ public class ContactTypeDAO {
             }
         }
 
-        return contactTypes;
+        return enterpriseList;
     }
 
 }
