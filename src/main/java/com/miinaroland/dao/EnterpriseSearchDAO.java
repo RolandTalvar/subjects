@@ -1,8 +1,6 @@
 package com.miinaroland.dao;
 
 import com.miinaroland.model.Enterprise;
-import com.miinaroland.model.Person;
-import com.sun.tools.javac.comp.Enter;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
