@@ -84,6 +84,22 @@
         </tr>
 
         <tr>
+            <td><label><h3>Employee attributes</h3></label></td>
+        </tr>
+
+        <tr th:each="subjectAttribute, stat : ${subjectAttributeListWrapper.subjectAttributeList}" >
+            <div th:each="subjectAttributeType, typeStat : ${subjectAttributeTypeListWrapper.subjectAttributeTypeList}">
+                <td th:if="${subjectAttributeTypeListWrapper.subjectAttributeTypeList[__${typeStat.index}__].subjectAttributeType == subjectAttributeListWrapper.subjectAttributeList[__${stat.index}__].subjectAttributeTypeFk}"><label th:text="*{subjectAttributeTypeListWrapper.subjectAttributeTypeList[__${stat.index}__].typeName}"></label></td>
+            </div>
+
+            <td th:if="${subjectAttributeListWrapper.subjectAttributeList[__${stat.index}__].dataType == 1}"><input type="text" th:field="*{subjectAttributeListWrapper.subjectAttributeList[__${stat.index}__].valueText}" /></td>
+            <td th:if="${subjectAttributeListWrapper.subjectAttributeList[__${stat.index}__].dataType == 2}"><input type="text" th:field="*{subjectAttributeListWrapper.subjectAttributeList[__${stat.index}__].valueNumber}" /></td>
+            <td th:if="${subjectAttributeListWrapper.subjectAttributeList[__${stat.index}__].dataType == 3}"><input type="text" th:field="*{subjectAttributeListWrapper.subjectAttributeList[__${stat.index}__].valueDate}" /></td>
+        </tr>
+
+        <tr />
+
+        <tr>
             <td><p> <input type="submit" value="Submit" /> </p></td>
         </tr>
     </table>

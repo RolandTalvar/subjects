@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/subject")
-@SessionAttributes({"person", "address", "enterprise", "employee", "contactListWrapper"})
+@SessionAttributes({"person", "address", "enterprise", "employee", "contactListWrapper", "subjectAttributeListWrapper", "customerAttributeListWrapper"})
 public class EditSubjectController {
 
     @Autowired
@@ -44,20 +45,27 @@ public class EditSubjectController {
     @Autowired
     ContactTypeDAO contactTypeDAO;
 
+    @Autowired
+    SubjectAttributeTypeRepository subjectAttributeTypeRepository;
+
+    @Autowired
+    SubjectAttributeRepository subjectAttributeRepository;
+
 
     @RequestMapping(value = "/editPerson", method = RequestMethod.GET, params = "id")
     public String getPersonEditForm(@RequestParam("id") long id, Model model) {
 
+        final long subjectType = 1L;
+        final long addressType = 1L;
+
         Person person = personRepository.findByPerson(id);
         model.addAttribute(person);
 
-        Address address = addressRepository.findBySubjectTypeFkAndSubjectFkAndAddressTypeFk(1L, id, 1L);
-        if (address == null) {
-            address = new Address();
-        }
+        Address address = addressRepository.findBySubjectTypeFkAndSubjectFkAndAddressTypeFk(subjectType, id, addressType);
+        address = getAddress(addressType, id, subjectType, address);
         model.addAttribute(address);
 
-        Customer customer = customerRepository.findBySubjectFkAndSubjectTypeFk(id, 1L);
+        Customer customer = customerRepository.findBySubjectFkAndSubjectTypeFk(id, subjectType);
         boolean isCustomer;
 
         if (customer != null) {
@@ -68,7 +76,7 @@ public class EditSubjectController {
 
         model.addAttribute("isCustomer", isCustomer);
 
-        List<Contact> contacts = contactDAO.findAll(1L, id);
+        List<Contact> contacts = contactDAO.findAll(subjectType, id);
         ContactListWrapper contactListWrapper = new ContactListWrapper();
         contactListWrapper.setContactList(contacts);
         model.addAttribute(contactListWrapper);
@@ -78,15 +86,45 @@ public class EditSubjectController {
         contactTypeListWrapper.setContactTypeList(contactTypes);
         model.addAttribute(contactTypeListWrapper);
 
+//        Subject attributes
+
+        List<SubjectAttributeType> subjectAttributeTypeList = subjectAttributeTypeRepository.findBySubjectTypeFk(subjectType);
+        SubjectAttributeTypeListWrapper subjectAttributeTypeListWrapper = new SubjectAttributeTypeListWrapper();
+        subjectAttributeTypeListWrapper.setSubjectAttributeTypeList(subjectAttributeTypeList);
+        model.addAttribute(subjectAttributeTypeListWrapper);
+
+        SubjectAttributeListWrapper subjectAttributeListWrapper = getSubjectAttributeListWrapper(id, subjectType, subjectAttributeTypeList);
+        model.addAttribute("subjectAttributeListWrapper", subjectAttributeListWrapper);
+
+        if (!isCustomer) {
+            return "editPerson";
+        }
+
+//        Customer attributes
+
+        List<SubjectAttributeType> customerAttributeTypeList = subjectAttributeTypeRepository.findBySubjectTypeFk(4L);
+        SubjectAttributeTypeListWrapper customerAttributeTypeListWrapper = new SubjectAttributeTypeListWrapper();
+        customerAttributeTypeListWrapper.setSubjectAttributeTypeList(customerAttributeTypeList);
+        model.addAttribute("customerAttributeTypeListWrapper", customerAttributeTypeListWrapper);
+
+        SubjectAttributeListWrapper customerAttributeListWrapper = getCustomerAttributeListWrapper(customer, customerAttributeTypeList);
+        model.addAttribute("customerAttributeListWrapper", customerAttributeListWrapper);
+
         return "editPerson";
 
     }
+
+
 
     @RequestMapping(value = "/editPerson", method = RequestMethod.POST)
     public String postPersonEditForm(@ModelAttribute("person") Person person,
                                      @ModelAttribute("address") Address address,
                                      @ModelAttribute("contactListWrapper") ContactListWrapper contactListWrapper,
+                                     @ModelAttribute("subjectAttributeListWrapper") SubjectAttributeListWrapper subjectAttributeListWrapper,
+                                     @ModelAttribute("customerAttributeListWrapper") SubjectAttributeListWrapper customerAttributeListWrapper,
                                      @RequestParam(required = false, value = "isCustomer") boolean isCustomer) {
+
+        final long subjectType = 1L;
 
         person.setUpdated(new java.sql.Timestamp(new java.util.Date().getTime()));
 
@@ -97,12 +135,20 @@ public class EditSubjectController {
         if (isCustomer) {
             Customer customer = new Customer();
             customer.setSubjectFk(person.getPerson());
-            customer.setSubjectTypeFk(1L);
+            customer.setSubjectTypeFk(subjectType);
             customerRepository.save(customer);
         }
 
         for (Contact contact: contactListWrapper.getContactList()) {
             contactDAO.insertOrUpdate(contact);
+        }
+
+        for (SubjectAttribute subjectAttribute: subjectAttributeListWrapper.getSubjectAttributeList()) {
+            subjectAttributeRepository.save(subjectAttribute);
+        }
+
+        for (SubjectAttribute subjectAttribute: customerAttributeListWrapper.getCustomerAttributeList()) {
+            subjectAttributeRepository.save(subjectAttribute);
         }
 
         return "redirect:/subject/editPerson?id=" + person.getPerson();
@@ -113,16 +159,17 @@ public class EditSubjectController {
     @RequestMapping(value = "/editEnterprise", method = RequestMethod.GET, params = "id")
     public String getEnterpriseEditForm(@RequestParam("id") long id, Model model) {
 
+        final long subjectType = 2L;
+        final long addressType = 3L;
+
         Enterprise enterprise = enterpriseRepository.findByEnterprise(id);
         model.addAttribute(enterprise);
 
-        Address address = addressRepository.findBySubjectTypeFkAndSubjectFkAndAddressTypeFk(2L, id, 3L);
-        if (address == null) {
-            address = new Address();
-        }
+        Address address = addressRepository.findBySubjectTypeFkAndSubjectFkAndAddressTypeFk(subjectType, id, addressType);
+        address = getAddress(addressType, id, subjectType, address);
         model.addAttribute(address);
 
-        Customer customer = customerRepository.findBySubjectFkAndSubjectTypeFk(id, 2L);
+        Customer customer = customerRepository.findBySubjectFkAndSubjectTypeFk(id, subjectType);
         boolean isCustomer;
 
         if (customer != null) {
@@ -133,7 +180,7 @@ public class EditSubjectController {
 
         model.addAttribute("isCustomer", isCustomer);
 
-        List<Contact> contacts = contactDAO.findAll(2L, id);
+        List<Contact> contacts = contactDAO.findAll(subjectType, id);
         ContactListWrapper contactListWrapper = new ContactListWrapper();
         contactListWrapper.setContactList(contacts);
         model.addAttribute(contactListWrapper);
@@ -143,16 +190,46 @@ public class EditSubjectController {
         contactTypeListWrapper.setContactTypeList(contactTypes);
         model.addAttribute(contactTypeListWrapper);
 
+//        Subject attributes
+
+        List<SubjectAttributeType> subjectAttributeTypeList = subjectAttributeTypeRepository.findBySubjectTypeFk(subjectType);
+        SubjectAttributeTypeListWrapper subjectAttributeTypeListWrapper = new SubjectAttributeTypeListWrapper();
+        subjectAttributeTypeListWrapper.setSubjectAttributeTypeList(subjectAttributeTypeList);
+        model.addAttribute(subjectAttributeTypeListWrapper);
+
+        SubjectAttributeListWrapper subjectAttributeListWrapper = getSubjectAttributeListWrapper(id, subjectType, subjectAttributeTypeList);
+        model.addAttribute("subjectAttributeListWrapper", subjectAttributeListWrapper);
+
+        if (!isCustomer) {
+            return "editEnterprise";
+        }
+
+//        Customer attributes
+
+        List<SubjectAttributeType> customerAttributeTypeList = subjectAttributeTypeRepository.findBySubjectTypeFk(4L);
+        SubjectAttributeTypeListWrapper customerAttributeTypeListWrapper = new SubjectAttributeTypeListWrapper();
+        customerAttributeTypeListWrapper.setSubjectAttributeTypeList(customerAttributeTypeList);
+        model.addAttribute("customerAttributeTypeListWrapper", customerAttributeTypeListWrapper);
+
+        SubjectAttributeListWrapper customerAttributeListWrapper = getCustomerAttributeListWrapper(customer, customerAttributeTypeList);
+        model.addAttribute("customerAttributeListWrapper", customerAttributeListWrapper);
+
         return "editEnterprise";
 
 
     }
 
+
+
     @RequestMapping(value = "/editEnterprise", method = RequestMethod.POST)
     public String postEnterpriseEditForm(@ModelAttribute("enterprise") Enterprise enterprise,
                                          @ModelAttribute("address") Address address,
                                          @ModelAttribute("contactListWrapper") ContactListWrapper contactListWrapper,
+                                         @ModelAttribute("subjectAttributeListWrapper") SubjectAttributeListWrapper subjectAttributeListWrapper,
+                                         @ModelAttribute("customerAttributeListWrapper") SubjectAttributeListWrapper customerAttributeListWrapper,
                                          @RequestParam(required = false, value = "isCustomer") boolean isCustomer) {
+
+        final long subjectType = 2L;
 
         enterprise.setUpdated(new java.sql.Timestamp(new java.util.Date().getTime()));
 
@@ -163,12 +240,20 @@ public class EditSubjectController {
         if (isCustomer) {
             Customer customer = new Customer();
             customer.setSubjectFk(enterprise.getEnterprise());
-            customer.setSubjectTypeFk(2L);
+            customer.setSubjectTypeFk(subjectType);
             customerRepository.save(customer);
         }
 
         for (Contact contact: contactListWrapper.getContactList()) {
             contactDAO.insertOrUpdate(contact);
+        }
+
+        for (SubjectAttribute subjectAttribute: subjectAttributeListWrapper.getSubjectAttributeList()) {
+            subjectAttributeRepository.save(subjectAttribute);
+        }
+
+        for (SubjectAttribute subjectAttribute: customerAttributeListWrapper.getCustomerAttributeList()) {
+            subjectAttributeRepository.save(subjectAttribute);
         }
 
         return "redirect:/subject/editEnterprise?id=" + enterprise.getEnterprise();
@@ -179,16 +264,17 @@ public class EditSubjectController {
     @RequestMapping(value = "/editEmployee", method = RequestMethod.GET, params = "id")
     public String getEmployeeEditForm(@RequestParam("id") long id, Model model) {
 
+        final long subjectType = 3L;
+        final long addressType = 1L;
+
         Employee employee = employeeRepository.findByEmployee(id);
         model.addAttribute(employee);
 
         Person person = personRepository.findByPerson(employee.getPersonFk());
         model.addAttribute(person);
 
-        Address address = addressRepository.findBySubjectTypeFkAndSubjectFkAndAddressTypeFk(3L, id, 1L);
-        if (address == null) {
-            address = new Address();
-        }
+        Address address = addressRepository.findBySubjectTypeFkAndSubjectFkAndAddressTypeFk(subjectType, id, addressType);
+        address = getAddress(addressType, id, subjectType, address);
         model.addAttribute(address);
 
         List<Enterprise> enterprises = enterpriseRepository.findAll();
@@ -197,7 +283,7 @@ public class EditSubjectController {
         List<StructUnit> structUnits = structUnitRepository.findByEnterpriseFk(employee.getEnterpriseFk());
         model.addAttribute("structUnits", structUnits);
 
-        List<Contact> contacts = contactDAO.findAll(3L, id);
+        List<Contact> contacts = contactDAO.findAll(subjectType, id);
         ContactListWrapper contactListWrapper = new ContactListWrapper();
         contactListWrapper.setContactList(contacts);
         model.addAttribute(contactListWrapper);
@@ -207,16 +293,28 @@ public class EditSubjectController {
         contactTypeListWrapper.setContactTypeList(contactTypes);
         model.addAttribute(contactTypeListWrapper);
 
+        List<SubjectAttributeType> subjectAttributeTypeList = subjectAttributeTypeRepository.findBySubjectTypeFk(subjectType);
+        SubjectAttributeTypeListWrapper subjectAttributeTypeListWrapper = new SubjectAttributeTypeListWrapper();
+        subjectAttributeTypeListWrapper.setSubjectAttributeTypeList(subjectAttributeTypeList);
+        model.addAttribute(subjectAttributeTypeListWrapper);
+
+        SubjectAttributeListWrapper subjectAttributeListWrapper = getSubjectAttributeListWrapper(id, subjectType, subjectAttributeTypeList);
+        model.addAttribute(subjectAttributeListWrapper);
+
+
         return "editEmployee";
 
 
     }
+
+
 
     @RequestMapping(value = "/editEmployee", method = RequestMethod.POST)
     public String postEmployeeEditForm(@ModelAttribute("person") Person person,
                                        @ModelAttribute("employee") Employee employee,
                                        @ModelAttribute("address") Address address,
                                        @ModelAttribute("contactListWrapper") ContactListWrapper contactListWrapper,
+                                       @ModelAttribute("subjectAttributeListWrapper") SubjectAttributeListWrapper subjectAttributeListWrapper,
                                        @RequestParam(required = false, value = "selectedEnterprise") Long selectedEnterprise,
                                        @RequestParam(required = false, value = "selectedStructUnit") Long selectedStructUnit) {
 
@@ -239,8 +337,106 @@ public class EditSubjectController {
             contactDAO.insertOrUpdate(contact);
         }
 
+        for (SubjectAttribute subjectAttribute: subjectAttributeListWrapper.getSubjectAttributeList()) {
+            subjectAttributeRepository.save(subjectAttribute);
+        }
+
         return "redirect:/subject/editEmployee?id=" + employee.getEmployee();
 
+    }
+
+    private Address getAddress(long addressType, @RequestParam("id") long id, long subjectType, Address address) {
+        if (address == null) {
+            address = new Address();
+            address.setAddressTypeFk(addressType);
+            address.setSubjectFk(id);
+            address.setSubjectTypeFk(subjectType);
+        }
+        return address;
+    }
+
+    private SubjectAttributeListWrapper getSubjectAttributeListWrapper(@RequestParam("id") long id, long subjectType, List<SubjectAttributeType> subjectAttributeTypeList) {
+        SubjectAttributeListWrapper subjectAttributeListWrapper = new SubjectAttributeListWrapper();
+        subjectAttributeListWrapper.setSubjectAttributeList(new ArrayList<>());
+
+        for (SubjectAttributeType subjectAttributeType: subjectAttributeTypeList) {
+
+            if (("Y").equalsIgnoreCase(subjectAttributeType.getMultipleAttributes())) {
+                List<SubjectAttribute> subjectAttributeList = subjectAttributeRepository.findBySubjectFkAndSubjectTypeFkAndSubjectAttributeTypeFk(id, subjectType, subjectAttributeType.getSubjectAttributeType());
+
+                if (subjectAttributeList.size() == 0) {
+                    SubjectAttribute subjectAttribute = new SubjectAttribute();
+                    subjectAttribute.setSubjectTypeFk(subjectType);
+                    subjectAttribute.setSubjectFk(id);
+                    subjectAttribute.setSubjectAttributeTypeFk(subjectAttributeType.getSubjectAttributeType());
+                    subjectAttribute.setDataType(subjectAttributeType.getDataType());
+                    subjectAttributeListWrapper.getSubjectAttributeList().add(subjectAttribute);
+
+                } else {
+                    for (SubjectAttribute subjectAttribute : subjectAttributeList) {
+                        subjectAttributeListWrapper.getSubjectAttributeList().add(subjectAttribute);
+                    }
+                }
+
+            } else {
+
+                SubjectAttribute subjectAttribute = subjectAttributeRepository.findBySubjectTypeFkAndSubjectFkAndSubjectAttributeTypeFk(subjectType, id, subjectAttributeType.getSubjectAttributeType());
+
+                if (subjectAttribute == null) {
+                    subjectAttribute = new SubjectAttribute();
+                    subjectAttribute.setSubjectTypeFk(subjectType);
+                    subjectAttribute.setSubjectFk(id);
+                    subjectAttribute.setSubjectAttributeTypeFk(subjectAttributeType.getSubjectAttributeType());
+                    subjectAttribute.setDataType(subjectAttributeType.getDataType());
+                }
+
+                subjectAttributeListWrapper.getSubjectAttributeList().add(subjectAttribute);
+            }
+
+        }
+        return subjectAttributeListWrapper;
+    }
+
+    private SubjectAttributeListWrapper getCustomerAttributeListWrapper(Customer customer, List<SubjectAttributeType> customerAttributeTypeList) {
+        SubjectAttributeListWrapper customerAttributeListWrapper = new SubjectAttributeListWrapper();
+        customerAttributeListWrapper.setCustomerAttributeList(new ArrayList<>());
+
+        for (SubjectAttributeType subjectAttributeType: customerAttributeTypeList) {
+
+            if (("Y").equalsIgnoreCase(subjectAttributeType.getMultipleAttributes())) {
+                List<SubjectAttribute> subjectAttributeList = subjectAttributeRepository.findBySubjectFkAndSubjectTypeFkAndSubjectAttributeTypeFk(customer.getCustomer(), 4L, subjectAttributeType.getSubjectAttributeType());
+
+                if (subjectAttributeList.size() == 0) {
+                    SubjectAttribute subjectAttribute = new SubjectAttribute();
+                    subjectAttribute.setSubjectTypeFk(4L);
+                    subjectAttribute.setSubjectFk(customer.getCustomer());
+                    subjectAttribute.setSubjectAttributeTypeFk(subjectAttributeType.getSubjectAttributeType());
+                    subjectAttribute.setDataType(subjectAttributeType.getDataType());
+                    customerAttributeListWrapper.getCustomerAttributeList().add(subjectAttribute);
+
+                } else {
+                    for (SubjectAttribute subjectAttribute : subjectAttributeList) {
+                        customerAttributeListWrapper.getCustomerAttributeList().add(subjectAttribute);
+                    }
+                }
+
+            } else {
+
+                SubjectAttribute subjectAttribute = subjectAttributeRepository.findBySubjectTypeFkAndSubjectFkAndSubjectAttributeTypeFk(4L, customer.getCustomer(), subjectAttributeType.getSubjectAttributeType());
+
+                if (subjectAttribute == null) {
+                    subjectAttribute = new SubjectAttribute();
+                    subjectAttribute.setSubjectTypeFk(4L);
+                    subjectAttribute.setSubjectFk(customer.getCustomer());
+                    subjectAttribute.setSubjectAttributeTypeFk(subjectAttributeType.getSubjectAttributeType());
+                    subjectAttribute.setDataType(subjectAttributeType.getDataType());
+                }
+
+                customerAttributeListWrapper.getCustomerAttributeList().add(subjectAttribute);
+            }
+
+        }
+        return customerAttributeListWrapper;
     }
 
 }

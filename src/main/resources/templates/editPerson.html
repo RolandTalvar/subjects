@@ -75,10 +75,40 @@
             <td><label><h3>Person attributes</h3></label></td>
         </tr>
 
+        <tr th:each="subjectAttribute, stat : ${subjectAttributeListWrapper.subjectAttributeList}" >
+            <div th:each="subjectAttributeType, typeStat : ${subjectAttributeTypeListWrapper.subjectAttributeTypeList}">
+                <td th:if="${subjectAttributeTypeListWrapper.subjectAttributeTypeList[__${typeStat.index}__].subjectAttributeType == subjectAttributeListWrapper.subjectAttributeList[__${stat.index}__].subjectAttributeTypeFk}"><label th:text="*{subjectAttributeTypeListWrapper.subjectAttributeTypeList[__${stat.index}__].typeName}"></label></td>
+            </div>
+
+            <td th:if="${subjectAttributeListWrapper.subjectAttributeList[__${stat.index}__].dataType == 1}"><input type="text" th:field="*{subjectAttributeListWrapper.subjectAttributeList[__${stat.index}__].valueText}" /></td>
+            <td th:if="${subjectAttributeListWrapper.subjectAttributeList[__${stat.index}__].dataType == 2}"><input type="text" th:field="*{subjectAttributeListWrapper.subjectAttributeList[__${stat.index}__].valueNumber}" /></td>
+            <td th:if="${subjectAttributeListWrapper.subjectAttributeList[__${stat.index}__].dataType == 3}"><input type="text" th:field="*{subjectAttributeListWrapper.subjectAttributeList[__${stat.index}__].valueDate}" /></td>
+        </tr>
+
+        <tr />
+
         <tr>
             <td><label>Customer</label></td>
             <td><input type="checkbox" th:name="${isCustomer}? '' : 'isCustomer'" th:checked="*{isCustomer}" th:disabled="${isCustomer}"/></td>
         </tr>
+
+        <div th:if="${isCustomer}">
+            <tr>
+                <td><label><h3>Customer attributes</h3></label></td>
+            </tr>
+
+            <tr th:each="subjectAttribute, cusStat : ${customerAttributeListWrapper.customerAttributeList}" >
+                <div th:each="subjectAttributeType, cusTypeStat : ${customerAttributeTypeListWrapper.subjectAttributeTypeList}">
+                    <td th:if="${customerAttributeTypeListWrapper.subjectAttributeTypeList[__${cusTypeStat.index}__].subjectAttributeType == customerAttributeListWrapper.customerAttributeList[__${cusStat.index}__].subjectAttributeTypeFk}"><label th:text="*{customerAttributeTypeListWrapper.subjectAttributeTypeList[__${cusStat.index}__].typeName}"></label></td>
+                </div>
+
+                <td th:if="${customerAttributeListWrapper.customerAttributeList[__${cusStat.index}__].dataType == 1}"><input type="text" th:field="*{customerAttributeListWrapper.customerAttributeList[__${cusStat.index}__].valueText}" /></td>
+                <td th:if="${customerAttributeListWrapper.customerAttributeList[__${cusStat.index}__].dataType == 2}"><input type="text" th:field="*{customerAttributeListWrapper.customerAttributeList[__${cusStat.index}__].valueNumber}" /></td>
+                <td th:if="${customerAttributeListWrapper.customerAttributeList[__${cusStat.index}__].dataType == 3}"><input type="text" th:field="*{customerAttributeListWrapper.customerAttributeList[__${cusStat.index}__].valueDate}" /></td>
+            </tr>
+
+            <tr />
+        </div>
 
         <tr>
             <td><p> <input type="submit" value="Submit" /> </p></td>

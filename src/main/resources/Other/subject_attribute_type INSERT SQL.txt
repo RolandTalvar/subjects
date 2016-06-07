@@ -1,17 +1,17 @@
 -- noinspection SqlNoDataSourceInspectionForFile
-INSERT INTO subject_attribute_type (subject_type_fk, type_name, data_type, multiple_attributes, orderby, required) VALUES (1, 'pikkus', 2, 'N', 3, 'N');
-INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple_attributes,orderby,required) VALUES (1,'kaal',2,'N',4,'N');
+INSERT INTO subject_attribute_type (subject_type_fk, type_name, data_type, multiple_attributes, orderby, required) VALUES (1, 'Pikkus', 2, 'N', 3, 'N');
+INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple_attributes,orderby,required) VALUES (1,'Kaal',2,'N',4,'N');
 
-INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple_attributes,orderby,required) VALUES (2,'ettevõtlusvorm',2,'N',3,'N');
-INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple_attributes,orderby,required) VALUES (2,'tegevdirektor',2,'N',4,'N');
+INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple_attributes,orderby,required) VALUES (2,'Ettevõtlusvorm',1,'N',3,'N');
+INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple_attributes,orderby,required) VALUES (2,'Tegevdirektor',1,'N',4,'N');
 
-INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple_attributes,orderby,required) VALUES (3,'osakond',1,'N',1,'N');
-INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple_attributes,orderby,required) VALUES (3,'töömeil',1,'N',2,'N');
-INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple_attributes,orderby,required) VALUES (3,'töökoormus',1,'N',3,'N');
-INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple_attributes,orderby,required) VALUES (3,'haridus',1,'N',4,'N');
+INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple_attributes,orderby,required) VALUES (3,'Osakond',1,'N',1,'N');
+INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple_attributes,orderby,required) VALUES (3,'Töömeil',1,'N',2,'N');
+INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple_attributes,orderby,required) VALUES (3,'Töökoormus',1,'N',3,'N');
+INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple_attributes,orderby,required) VALUES (3,'Haridus',1,'N',4,'N');
 
-INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple_attributes,orderby,required) VALUES (4,'soovib uudiskirja',2,'N',3,'N');
-INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple_attributes,orderby,required) VALUES (4,'kuldklient',2,'N',4,'N');
+INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple_attributes,orderby,required) VALUES (4,'Soovib uudiskirja',1,'N',3,'N');
+INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple_attributes,orderby,required) VALUES (4,'Kuldklient',1,'N',4,'N');
 
 INSERT INTO struct_unit (enterprise_fk,name) VALUES (1,'Personaliosakond');
 INSERT INTO struct_unit (enterprise_fk,name) VALUES (1,'Raamatupidamine');

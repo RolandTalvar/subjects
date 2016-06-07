@@ -1,7 +1,6 @@
 package com.miinaroland.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -11,6 +10,8 @@ import java.util.Date;
 public class SubjectAttribute {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subject_attribute_id")
+    @SequenceGenerator(name="subject_attribute_id", sequenceName="subject_attribute_id", allocationSize=1)
     private long subjectAttribute;
     private Long subjectFk;
     private Long subjectTypeFk;
