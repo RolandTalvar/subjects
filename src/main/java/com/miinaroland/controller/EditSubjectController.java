@@ -98,18 +98,20 @@ public class EditSubjectController {
         SubjectAttributeListWrapper subjectAttributeListWrapper = getSubjectAttributeListWrapper(id, subjectType, subjectAttributeTypeList);
         model.addAttribute("subjectAttributeListWrapper", subjectAttributeListWrapper);
 
-        if (!isCustomer) {
-            return "editPerson";
+        //        Customer attributes
+
+        SubjectAttributeTypeListWrapper customerAttributeTypeListWrapper = new SubjectAttributeTypeListWrapper();
+        SubjectAttributeListWrapper customerAttributeListWrapper = new SubjectAttributeListWrapper();
+
+        if (isCustomer) {
+            List<SubjectAttributeType> customerAttributeTypeList = subjectAttributeTypeRepository.findBySubjectTypeFk(4L);
+            customerAttributeTypeListWrapper = new SubjectAttributeTypeListWrapper();
+            customerAttributeTypeListWrapper.setSubjectAttributeTypeList(customerAttributeTypeList);
+
+            customerAttributeListWrapper = getCustomerAttributeListWrapper(customer, customerAttributeTypeList);
         }
 
-//        Customer attributes
-
-        List<SubjectAttributeType> customerAttributeTypeList = subjectAttributeTypeRepository.findBySubjectTypeFk(4L);
-        SubjectAttributeTypeListWrapper customerAttributeTypeListWrapper = new SubjectAttributeTypeListWrapper();
-        customerAttributeTypeListWrapper.setSubjectAttributeTypeList(customerAttributeTypeList);
         model.addAttribute("customerAttributeTypeListWrapper", customerAttributeTypeListWrapper);
-
-        SubjectAttributeListWrapper customerAttributeListWrapper = getCustomerAttributeListWrapper(customer, customerAttributeTypeList);
         model.addAttribute("customerAttributeListWrapper", customerAttributeListWrapper);
 
         return "editPerson";
@@ -141,17 +143,26 @@ public class EditSubjectController {
             customerRepository.save(customer);
         }
 
-        for (Contact contact: contactListWrapper.getContactList()) {
-            contactDAO.insertOrUpdate(contact);
+        if (contactListWrapper != null) {
+            for (Contact contact: contactListWrapper.getContactList()) {
+                contactDAO.insertOrUpdate(contact);
+            }
         }
 
-        for (SubjectAttribute subjectAttribute: subjectAttributeListWrapper.getSubjectAttributeList()) {
-            subjectAttributeRepository.save(subjectAttribute);
+
+        if (subjectAttributeListWrapper != null) {
+            for (SubjectAttribute subjectAttribute: subjectAttributeListWrapper.getSubjectAttributeList()) {
+                subjectAttributeRepository.save(subjectAttribute);
+            }
         }
 
-        for (SubjectAttribute subjectAttribute: customerAttributeListWrapper.getCustomerAttributeList()) {
-            subjectAttributeRepository.save(subjectAttribute);
+
+        if (customerAttributeListWrapper != null) {
+            for (SubjectAttribute subjectAttribute: customerAttributeListWrapper.getCustomerAttributeList()) {
+                subjectAttributeRepository.save(subjectAttribute);
+            }
         }
+
 
         return "redirect:/subject/editPerson?id=" + person.getPerson();
 
