@@ -44,7 +44,7 @@ public class PersonSearchDAO {
                 sql = sql.concat(" UPPER(identity_code) LIKE UPPER('" + identityCode + "%') AND ");
             }
             if (birthDate != null) {
-                sql = sql.concat(" UPPER(birth_date) LIKE UPPER('" + birthDate + "%') AND ");
+                sql = sql.concat(" birth_date='" + birthDate + "' AND ");
             }
 
             if (sql.endsWith("AND ")) {
