@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+    <!-- Bootstrap Date-Picker Plugin -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
+    <title>Subject Search</title>
+</head>
+<body ng-app="searchApp" ng-controller="searchController">
+
+<h3>Search</h3>
+<br />
+<br />
+<br />
+
+<p>Subject Type:
+    <select ng-model="searchType" ng-init="searchType = 'all'">
+        <option value="all">All</option>
+        <option value="person">Person</option>
+        <option value="enterprise">Enterprise</option>
+        <option value="employee">Employee</option>
+        <option value="customer">Customer</option>
+    </select>
+</p>
+<br />
+
+<form>
+    First Name: <input placeholder="First name..." ng-model="search.firstName" ng-disabled="saving" /><br /><br />
+    Last Name: <input placeholder="Last name..." ng-model="search.lastName" ng-disabled="saving" /><br /><br />
+    Identity Code: <input placeholder="Identity Code..." ng-model="search.identityCode" ng-disabled="saving" /><br /><br />
+    Birth Date: <input class="form-control" placeholder="yyyy-mm-dd" type="text" name="birthDate" ng-model="search.birthDate"/><br /><br />
+    <input type="submit" ng-click="search()" value="Search" readonly='true'/><br /><br /><br />
+</form>
+
+<table class="table table-hover">
+    <thead>
+    <th>First Name</th>
+    <th>Name</th>
+    <th>Identity Code</th>
+    <th>Birth Date</th>
+    </thead>
+    <tr ng-repeat="subject in subjects | orderBy:'id'">
+        <td>{{ subject.firstName }}</td>
+        <td>{{ subject.lastName }}</td>
+        <td>{{ subject.identityCode }}</td>
+        <td>{{ subject.birthDate }}</td>
+    </tr>
+</table>
+
+
+<script src="searchApp.js"></script>
+<script src="searchController.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
