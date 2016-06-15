@@ -74,7 +74,7 @@ public class AdditionalAddressesController {
         Person person = personRepository.findByPerson(employee.getPersonFk());
         model.addAttribute(person);
 
-        List<Address> addressList = addressRepository.findBySubjectTypeFkAndAddressTypeFkAndSubjectFk(3L, 2L, id);
+        List<Address> addressList = addressRepository.findBySubjectTypeFkAndAddressTypeFkAndSubjectFk(1L, 2L, person.getPerson());
         model.addAttribute("addressList", addressList);
 
         return "additionalEmployeeAddresses";
@@ -206,8 +206,8 @@ public class AdditionalAddressesController {
     @RequestMapping(value = "/addAdditionalEmployeeAddress", method = RequestMethod.POST)
     public String postAdditionalEmployeeAddressAddForm(@ModelAttribute("address") Address address, @ModelAttribute("employee") Employee employee) {
 
-        address.setSubjectFk(employee.getEmployee());
-        address.setSubjectTypeFk(3L);
+        address.setSubjectFk(employee.getPersonFk());
+        address.setSubjectTypeFk(1L);
         address.setAddressTypeFk(2L);
 
         addressRepository.save(address);
@@ -248,7 +248,7 @@ public class AdditionalAddressesController {
     @RequestMapping(value = "/changeToMainEmployeeAddress", method = RequestMethod.GET, params = "id")
     public String changeToMainEmployeeAddress(@RequestParam("id") long id, @ModelAttribute("employee") Employee employee) {
 
-        Address mainAddress = addressRepository.findBySubjectTypeFkAndSubjectFkAndAddressTypeFk(3L, employee.getEmployee(), 1L);
+        Address mainAddress = addressRepository.findBySubjectTypeFkAndSubjectFkAndAddressTypeFk(1L, employee.getPersonFk(), 1L);
         mainAddress.setAddressTypeFk(2L);
         addressRepository.save(mainAddress);
 

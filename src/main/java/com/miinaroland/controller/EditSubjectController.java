@@ -105,7 +105,6 @@ public class EditSubjectController {
 
         if (isCustomer) {
             List<SubjectAttributeType> customerAttributeTypeList = subjectAttributeTypeRepository.findBySubjectTypeFk(4L);
-            customerAttributeTypeListWrapper = new SubjectAttributeTypeListWrapper();
             customerAttributeTypeListWrapper.setSubjectAttributeTypeList(customerAttributeTypeList);
 
             customerAttributeListWrapper = getCustomerAttributeListWrapper(customer, customerAttributeTypeList);
@@ -213,18 +212,21 @@ public class EditSubjectController {
         SubjectAttributeListWrapper subjectAttributeListWrapper = getSubjectAttributeListWrapper(id, subjectType, subjectAttributeTypeList);
         model.addAttribute("subjectAttributeListWrapper", subjectAttributeListWrapper);
 
-        if (!isCustomer) {
-            return "editEnterprise";
-        }
+
 
 //        Customer attributes
 
-        List<SubjectAttributeType> customerAttributeTypeList = subjectAttributeTypeRepository.findBySubjectTypeFk(4L);
         SubjectAttributeTypeListWrapper customerAttributeTypeListWrapper = new SubjectAttributeTypeListWrapper();
-        customerAttributeTypeListWrapper.setSubjectAttributeTypeList(customerAttributeTypeList);
-        model.addAttribute("customerAttributeTypeListWrapper", customerAttributeTypeListWrapper);
+        SubjectAttributeListWrapper customerAttributeListWrapper = new SubjectAttributeListWrapper();
 
-        SubjectAttributeListWrapper customerAttributeListWrapper = getCustomerAttributeListWrapper(customer, customerAttributeTypeList);
+        if (isCustomer) {
+            List<SubjectAttributeType> customerAttributeTypeList = subjectAttributeTypeRepository.findBySubjectTypeFk(4L);
+            customerAttributeTypeListWrapper.setSubjectAttributeTypeList(customerAttributeTypeList);
+
+            customerAttributeListWrapper = getCustomerAttributeListWrapper(customer, customerAttributeTypeList);
+        }
+
+        model.addAttribute("customerAttributeTypeListWrapper", customerAttributeTypeListWrapper);
         model.addAttribute("customerAttributeListWrapper", customerAttributeListWrapper);
 
         return "editEnterprise";
@@ -257,17 +259,24 @@ public class EditSubjectController {
             customerRepository.save(customer);
         }
 
-        for (Contact contact: contactListWrapper.getContactList()) {
-            contactDAO.insertOrUpdate(contact);
+        if (contactListWrapper != null && contactListWrapper.getContactList() != null) {
+            for (Contact contact: contactListWrapper.getContactList()) {
+                contactDAO.insertOrUpdate(contact);
+            }
         }
 
-        for (SubjectAttribute subjectAttribute: subjectAttributeListWrapper.getSubjectAttributeList()) {
-            subjectAttributeRepository.save(subjectAttribute);
+        if (subjectAttributeListWrapper != null && subjectAttributeListWrapper.getSubjectAttributeList() != null) {
+            for (SubjectAttribute subjectAttribute: subjectAttributeListWrapper.getSubjectAttributeList()) {
+                subjectAttributeRepository.save(subjectAttribute);
+            }
         }
 
-        for (SubjectAttribute subjectAttribute: customerAttributeListWrapper.getCustomerAttributeList()) {
-            subjectAttributeRepository.save(subjectAttribute);
+        if (customerAttributeListWrapper != null && customerAttributeListWrapper.getCustomerAttributeList() != null) {
+            for (SubjectAttribute subjectAttribute: customerAttributeListWrapper.getCustomerAttributeList()) {
+                subjectAttributeRepository.save(subjectAttribute);
+            }
         }
+
 
         return "redirect:/subject/editEnterprise?id=" + enterprise.getEnterprise();
 
@@ -286,8 +295,8 @@ public class EditSubjectController {
         Person person = personRepository.findByPerson(employee.getPersonFk());
         model.addAttribute(person);
 
-        Address address = addressRepository.findBySubjectTypeFkAndSubjectFkAndAddressTypeFk(subjectType, id, addressType);
-        address = getAddress(addressType, id, subjectType, address);
+        Address address = addressRepository.findBySubjectTypeFkAndSubjectFkAndAddressTypeFk(1L, person.getPerson(), addressType);
+        address = getAddress(addressType, person.getPerson(), 1L, address);
         model.addAttribute(address);
 
         List<Enterprise> enterprises = enterpriseRepository.findAll();
@@ -296,7 +305,7 @@ public class EditSubjectController {
         List<StructUnit> structUnits = structUnitRepository.findByEnterpriseFk(employee.getEnterpriseFk());
         model.addAttribute("structUnits", structUnits);
 
-        List<Contact> contacts = contactDAO.findAll(subjectType, id);
+        List<Contact> contacts = contactDAO.findAll(1L, employee.getPersonFk());
         ContactListWrapper contactListWrapper = new ContactListWrapper();
         contactListWrapper.setContactList(contacts);
         model.addAttribute(contactListWrapper);
@@ -358,7 +367,7 @@ public class EditSubjectController {
 
     }
 
-    private Address getAddress(long addressType, @RequestParam("id") long id, long subjectType, Address address) {
+    private Address getAddress(long addressType, long id, long subjectType, Address address) {
         if (address == null) {
             address = new Address();
             address.setAddressTypeFk(addressType);

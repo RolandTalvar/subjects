@@ -164,7 +164,7 @@ public class NewContactController {
                                           @ModelAttribute Contact contact) {
 
 
-        List<Contact> contactList = contactDAO.findAllOfType(3L, employee.getEmployee(), contact.getContactTypeFk());
+        List<Contact> contactList = contactDAO.findAllOfType(1L, employee.getPersonFk(), contact.getContactTypeFk());
 
         Long previousOrderBy;
         if (contactList.size() == 0) {
@@ -179,8 +179,8 @@ public class NewContactController {
 
         long lastId = contactDAO.getLastId();
 
-        contact.setSubjectFk(employee.getEmployee());
-        contact.setSubjectTypeFk(3L);
+        contact.setSubjectFk(employee.getPersonFk());
+        contact.setSubjectTypeFk(1L);
         contact.setOrderby(previousOrderBy + 1);
         contact.setContact(lastId + 1);
         contactDAO.insertOrUpdate(contact);
