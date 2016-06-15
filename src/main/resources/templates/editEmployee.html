@@ -40,13 +40,13 @@
 
         <tr>
             <td><label>Enterprise</label></td>
-            <td><select name="selectedEnterprise">
+            <td><select name="selectedEnterprise" id="selectedEnterprise" onchange="loadStructureUnits();">
                 <option th:each="enterprise : ${enterprises}" th:value="${enterprise.enterprise}" th:text="${enterprise.name}" th:selected="${enterprise.enterprise == employee.enterpriseFk}" >Enterprise</option>
             </select></td>
         </tr>
         <tr>
             <td><label>Structure unit</label></td>
-            <td><select name="selectedStructUnit">
+            <td><select name="selectedStructUnit" id="selectedStructUnit">
                 <option th:each="structUnit : ${structUnits}" th:value="${structUnit.structUnit}" th:text="${structUnit.name}" th:selected="${structUnit.structUnit == employee.structUnitFk}">Structure unit</option>
             </select></td>
         </tr>
@@ -120,7 +120,21 @@
             autoclose: true,
         };
         date_input.datepicker(options);
-    })
+    });
+
+
+    loadStructureUnits = function() {
+        $.getJSON("http://localhost:8080/subject/search/structureUnits?enterpriseID=" + $( "#selectedEnterprise" ).val(), function(data) {
+            $("#selectedStructUnit option").remove(); // Remove all <option> child tags.
+            $.each(data, function(index, item) { // Iterates through a collection
+                $("#selectedStructUnit").append( // Append an object to the inside of the select box
+                        $("<option></option>") // Yes you can do this.
+                                .text(item.name)
+                                .val(item.structUnit)
+                );
+            });
+        });
+    };
 
     /*]]>*/
 </script>

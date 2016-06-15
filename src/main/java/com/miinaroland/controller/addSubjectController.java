@@ -96,7 +96,7 @@ public class AddSubjectController {
 
         long lastId = contactDAO.getLastId();
         Contact contact = new Contact();
-        contact.setContact(lastId + 1);
+//        contact.setContact(lastId + 1);
         contact.setSubjectFk(person.getPerson());
         contact.setSubjectTypeFk(1L);
         contact.setOrderby(1L);
@@ -104,7 +104,7 @@ public class AddSubjectController {
         contactRepository.save(contact);
 
         Contact contact2 = new Contact();
-        contact2.setContact(lastId + 2);
+//        contact2.setContact(lastId + 2);
         contact2.setSubjectFk(person.getPerson());
         contact2.setSubjectTypeFk(1L);
         contact2.setOrderby(1L);
@@ -152,7 +152,7 @@ public class AddSubjectController {
 
         long lastId = contactDAO.getLastId();
         Contact contact = new Contact();
-        contact.setContact(lastId + 1);
+//        contact.setContact(lastId + 1);
         contact.setSubjectFk(enterprise.getEnterprise());
         contact.setSubjectTypeFk(2L);
         contact.setOrderby(1L);
@@ -160,7 +160,7 @@ public class AddSubjectController {
         contactRepository.save(contact);
 
         Contact contact2 = new Contact();
-        contact2.setContact(lastId + 2);
+//        contact2.setContact(lastId + 2);
         contact2.setSubjectFk(enterprise.getEnterprise());
         contact2.setSubjectTypeFk(2L);
         contact2.setOrderby(1L);
@@ -223,7 +223,7 @@ public class AddSubjectController {
 
         long lastId = contactDAO.getLastId();
         Contact contact = new Contact();
-        contact.setContact(lastId + 1);
+//        contact.setContact(lastId + 1);
         contact.setSubjectFk(employee.getPersonFk());
         contact.setSubjectTypeFk(1L);
         contact.setOrderby(1L);
@@ -231,7 +231,7 @@ public class AddSubjectController {
         contactRepository.save(contact);
 
         Contact contact2 = new Contact();
-        contact2.setContact(lastId + 2);
+//        contact2.setContact(lastId + 2);
         contact2.setSubjectFk(employee.getPersonFk());
         contact2.setSubjectTypeFk(1L);
         contact2.setOrderby(1L);

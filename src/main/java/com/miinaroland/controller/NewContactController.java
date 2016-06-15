@@ -23,6 +23,9 @@ public class NewContactController {
     SubjectTypeRepository subjectTypeRepository;
 
     @Autowired
+    ContactRepository contactRepository;
+
+    @Autowired
     PersonRepository personRepository;
 
     @Autowired
@@ -88,7 +91,8 @@ public class NewContactController {
         contact.setSubjectTypeFk(1L);
         contact.setOrderby(previousOrderBy + 1);
         contact.setContact(lastId + 1);
-        contactDAO.insertOrUpdate(contact);
+//        contactDAO.insertOrUpdate(contact);
+        contactRepository.save(contact);
 
         return "redirect:/subject/editPerson?id=" + person.getPerson();
     }
@@ -134,7 +138,8 @@ public class NewContactController {
         contact.setSubjectTypeFk(2L);
         contact.setOrderby(previousOrderBy + 1);
         contact.setContact(lastId + 1);
-        contactDAO.insertOrUpdate(contact);
+//        contactDAO.insertOrUpdate(contact);
+        contactRepository.save(contact);
 
         return "redirect:/subject/editEnterprise?id=" + enterprise.getEnterprise();
     }
@@ -183,7 +188,8 @@ public class NewContactController {
         contact.setSubjectTypeFk(1L);
         contact.setOrderby(previousOrderBy + 1);
         contact.setContact(lastId + 1);
-        contactDAO.insertOrUpdate(contact);
+//        contactDAO.insertOrUpdate(contact);
+        contactRepository.save(contact);
 
         return "redirect:/subject/editEmployee?id=" + employee.getEmployee();
     }

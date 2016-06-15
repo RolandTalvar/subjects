@@ -42,7 +42,18 @@ public class ServicesController {
     @Autowired
     AddressRepository addressRepository;
 
+    @Autowired
+    StructUnitRepository structUnitRepository;
+
     private static final Logger logger = LoggerFactory.getLogger("subjectLogger");
+
+    @RequestMapping(value = "structureUnits", method = RequestMethod.GET)
+    public String getStructureUnits(@RequestParam(value = "enterpriseID") Long enterpriseID) {
+
+        List<StructUnit> structUnitList = structUnitRepository.findByEnterpriseFk(enterpriseID);
+        Gson gson = new Gson();
+        return gson.toJson(structUnitList);
+    }
 
     @RequestMapping(value = "/person", method = RequestMethod.GET)
     public String getPersonList(@RequestParam(value = "firstName", required = false) String firstName,

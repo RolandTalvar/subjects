@@ -40,7 +40,7 @@
 
         <tr>
             <td><label>Enterprise</label></td>
-            <td><select th:field="*{enterprise.enterprise}">
+            <td><select th:field="*{enterprise.enterprise}" onchange="loadStructureUnits();">
                 <option th:each="enterprise : ${enterprises}" th:value="${enterprise.enterprise}" th:text="${enterprise.name}">Enterprise</option>
             </select></td>
         </tr>
@@ -96,7 +96,20 @@
             autoclose: true,
         };
         date_input.datepicker(options);
-    })
+    });
+
+    loadStructureUnits = function() {
+        $.getJSON("http://localhost:8080/subject/search/structureUnits?enterpriseID=" + $( "#enterprise" ).val(), function(data) {
+            $("#structUnit option").remove(); // Remove all <option> child tags.
+            $.each(data, function(index, item) { // Iterates through a collection
+                $("#structUnit").append( // Append an object to the inside of the select box
+                        $("<option></option>") // Yes you can do this.
+                                .text(item.name)
+                                .val(item.structUnit)
+                );
+            });
+        });
+    };
 
     /*]]>*/
 </script>

@@ -53,6 +53,9 @@ public class EditSubjectController {
     @Autowired
     SubjectAttributeRepository subjectAttributeRepository;
 
+    @Autowired
+    ContactRepository contactRepository;
+
 
     @RequestMapping(value = "/editPerson", method = RequestMethod.GET, params = "id")
     public String getPersonEditForm(@RequestParam("id") long id, Model model) {
@@ -148,7 +151,8 @@ public class EditSubjectController {
 
         if (contactListWrapper != null && contactListWrapper.getContactList() != null) {
             for (Contact contact: contactListWrapper.getContactList()) {
-                contactDAO.insertOrUpdate(contact);
+                contactRepository.save(contact);
+//                contactDAO.insertOrUpdate(contact);
             }
         }
 
@@ -282,7 +286,8 @@ public class EditSubjectController {
 
         if (contactListWrapper != null && contactListWrapper.getContactList() != null) {
             for (Contact contact: contactListWrapper.getContactList()) {
-                contactDAO.insertOrUpdate(contact);
+                contactRepository.save(contact);
+//                contactDAO.insertOrUpdate(contact);
             }
         }
 
@@ -299,6 +304,7 @@ public class EditSubjectController {
         } else if (isCustomer) {
 
             List<SubjectAttributeType> subjectAttributeTypeList = subjectAttributeTypeRepository.findBySubjectTypeFk(4L);
+            List<SubjectAttribute> customerAttributeList = new ArrayList<>();
 
 
             for (SubjectAttributeType type : subjectAttributeTypeList) {
@@ -309,7 +315,9 @@ public class EditSubjectController {
                 subjectAttribute.setOrderby(type.getOrderby());
                 subjectAttribute.setDataType(type.getDataType());
                 subjectAttributeRepository.save(subjectAttribute);
+                customerAttributeList.add(subjectAttribute);
             }
+//            customerAttributeListWrapper.setCustomerAttributeList(customerAttributeList);
         }
 
 
@@ -391,7 +399,8 @@ public class EditSubjectController {
         addressRepository.save(address);
 
         for (Contact contact: contactListWrapper.getContactList()) {
-            contactDAO.insertOrUpdate(contact);
+            contactRepository.save(contact);
+//            contactDAO.insertOrUpdate(contact);
         }
 
         for (SubjectAttribute subjectAttribute: subjectAttributeListWrapper.getSubjectAttributeList()) {
