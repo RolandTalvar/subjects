@@ -4,6 +4,8 @@ import com.miinaroland.dao.ContactDAO;
 import com.miinaroland.dao.ContactTypeDAO;
 import com.miinaroland.model.*;
 import com.miinaroland.repository.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,8 @@ import java.util.List;
 @RequestMapping("/subject")
 @SessionAttributes({"person", "address", "enterprise", "employee", "contactListWrapper", "subjectAttributeListWrapper", "customerAttributeListWrapper"})
 public class EditSubjectController {
+
+    private static final Logger logger = LoggerFactory.getLogger("subjectLogger");
 
     @Autowired
     SubjectTypeRepository subjectTypeRepository;
@@ -59,6 +63,8 @@ public class EditSubjectController {
 
     @RequestMapping(value = "/editPerson", method = RequestMethod.GET, params = "id")
     public String getPersonEditForm(@RequestParam("id") long id, Model model) {
+
+        logger.info("Getting edit person form");
 
         final long subjectType = 1L;
         final long addressType = 1L;
@@ -130,6 +136,8 @@ public class EditSubjectController {
                                      @ModelAttribute("customerAttributeListWrapper") SubjectAttributeListWrapper customerAttributeListWrapper,
                                      @RequestParam(required = false, value = "isCustomer") boolean isCustomer) {
 
+        logger.info("Posting edit person form");
+
         final long subjectType = 1L;
 
         person.setUpdated(new java.sql.Timestamp(new java.util.Date().getTime()));
@@ -191,6 +199,8 @@ public class EditSubjectController {
 
     @RequestMapping(value = "/editEnterprise", method = RequestMethod.GET, params = "id")
     public String getEnterpriseEditForm(@RequestParam("id") long id, Model model) {
+
+        logger.info("Getting edit enterprise form");
 
         final long subjectType = 2L;
         final long addressType = 3L;
@@ -265,6 +275,8 @@ public class EditSubjectController {
                                          @ModelAttribute("customerAttributeListWrapper") SubjectAttributeListWrapper customerAttributeListWrapper,
                                          @RequestParam(required = false, value = "isCustomer") boolean isCustomer) {
 
+        logger.info("Posting edit enterprise form");
+
         final long subjectType = 2L;
 
         enterprise.setUpdated(new java.sql.Timestamp(new java.util.Date().getTime()));
@@ -329,6 +341,8 @@ public class EditSubjectController {
     @RequestMapping(value = "/editEmployee", method = RequestMethod.GET, params = "id")
     public String getEmployeeEditForm(@RequestParam("id") long id, Model model) {
 
+        logger.info("Getting edit employee form");
+
         final long subjectType = 3L;
         final long addressType = 1L;
 
@@ -382,6 +396,8 @@ public class EditSubjectController {
                                        @ModelAttribute("subjectAttributeListWrapper") SubjectAttributeListWrapper subjectAttributeListWrapper,
                                        @RequestParam(required = false, value = "selectedEnterprise") Long selectedEnterprise,
                                        @RequestParam(required = false, value = "selectedStructUnit") Long selectedStructUnit) {
+
+        logger.info("Posting edit employee form");
 
         person.setUpdated(new java.sql.Timestamp(new java.util.Date().getTime()));
 

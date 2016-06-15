@@ -50,6 +50,8 @@ public class ServicesController {
     @RequestMapping(value = "structureUnits", method = RequestMethod.GET)
     public String getStructureUnits(@RequestParam(value = "enterpriseID") Long enterpriseID) {
 
+        logger.info("Getting structure units...");
+
         List<StructUnit> structUnitList = structUnitRepository.findByEnterpriseFk(enterpriseID);
         Gson gson = new Gson();
         return gson.toJson(structUnitList);
@@ -74,7 +76,7 @@ public class ServicesController {
                                    @RequestParam(value = "attributeValueDate", required = false) java.sql.Date attributeValueDate
     ) {
 
-        logger.info("Doing person IDs search");
+        logger.info("Doing person search");
 
 
         List<Long> personIDsList = personSearchDAO.getPersonIdsBySearch(firstName, lastName, identityCode, birthDate,

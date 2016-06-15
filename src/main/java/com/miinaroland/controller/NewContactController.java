@@ -4,6 +4,8 @@ import com.miinaroland.dao.ContactDAO;
 import com.miinaroland.dao.ContactTypeDAO;
 import com.miinaroland.model.*;
 import com.miinaroland.repository.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,8 @@ import java.util.List;
 @RequestMapping("/subject")
 @SessionAttributes({"person", "address", "enterprise", "employee", "contactListWrapper"})
 public class NewContactController {
+
+    private static final Logger logger = LoggerFactory.getLogger("subjectLogger");
 
     @Autowired
     SubjectTypeRepository subjectTypeRepository;
@@ -53,6 +57,8 @@ public class NewContactController {
     @RequestMapping(value = "/addNewPersonContact", method = RequestMethod.GET, params = "id")
     public String getAddNewPersonContact(@RequestParam("id") long id, Model model) {
 
+        logger.info("Getting new person contact form");
+
         Contact contact = new Contact();
         model.addAttribute(contact);
 
@@ -70,6 +76,8 @@ public class NewContactController {
     @RequestMapping(value = "/addNewPersonContact", method = RequestMethod.POST)
     public String postAddNewPersonContact(@ModelAttribute("person") Person person,
                                           @ModelAttribute Contact contact) {
+
+        logger.info("Posting new person contact form");
 
 
         List<Contact> contactList = contactDAO.findAllOfType(1L, person.getPerson(), contact.getContactTypeFk());
@@ -100,6 +108,8 @@ public class NewContactController {
     @RequestMapping(value = "/addNewEnterpriseContact", method = RequestMethod.GET, params = "id")
     public String getAddNewEnterpriseContact(@RequestParam("id") long id, Model model) {
 
+        logger.info("Getting new enterprise contact form");
+
         Contact contact = new Contact();
         model.addAttribute(contact);
 
@@ -117,6 +127,8 @@ public class NewContactController {
     @RequestMapping(value = "/addNewEnterpriseContact", method = RequestMethod.POST)
     public String postAddNewEnterpriseContact(@ModelAttribute("enterprise") Enterprise enterprise,
                                           @ModelAttribute Contact contact) {
+
+        logger.info("Posting new enterprise contact form");
 
 
         List<Contact> contactList = contactDAO.findAllOfType(2L, enterprise.getEnterprise(), contact.getContactTypeFk());
@@ -147,6 +159,8 @@ public class NewContactController {
     @RequestMapping(value = "/addNewEmployeeContact", method = RequestMethod.GET, params = "id")
     public String getAddNewEmployeeContact(@RequestParam("id") long id, Model model) {
 
+        logger.info("Getting new employee contact form");
+
         Contact contact = new Contact();
         model.addAttribute(contact);
 
@@ -167,6 +181,8 @@ public class NewContactController {
     public String postAddNewEmployeeContact(@ModelAttribute("person") Person person,
                                             @ModelAttribute("employee") Employee employee,
                                           @ModelAttribute Contact contact) {
+
+        logger.info("Posting new employee contact form");
 
 
         List<Contact> contactList = contactDAO.findAllOfType(1L, employee.getPersonFk(), contact.getContactTypeFk());
