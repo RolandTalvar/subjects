@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Employee Roles</title>
+
+</head>
+<body>
+<h1>Employee Roles</h1>
+
+    <table>
+
+        <div th:fragment="employeeRoles">
+            <tr>
+                <td><label><h3>Employee Roles</h3></label></td>
+            </tr>
+            <tr th:each="employeeRole, stat : ${employeeRoleListWrapper.employeeRoleList}" >
+                <td>
+                    <select th:field="${employeeRoleListWrapper.employeeRoleList[__${stat.index}__].employeeRoleTypeFk}">
+                        <div>
+                        <option th:each="employeeRoleType, typeStat : ${employeeRoleTypeListWrapper.employeeRoleTypeList}"
+                                th:object="${employeeRoleTypeListWrapper.employeeRoleTypeList[__${typeStat.index}__]}"
+                                th:attr="typeFromemployeeRole=${employeeRoleListWrapper.employeeRoleList[__${stat.index}__].employeeRoleTypeFk}, currentType=*{employeeRoleType}"
+                                th:value="*{employeeRoleType}" th:text="*{typeName}"
+                                th:selected="${employeeRoleListWrapper.employeeRoleList[__${stat.index}__].employeeRoleTypeFk} == *{employeeRoleType}"></option>
+                        </div>
+                    </select>
+                </td>
+                <td>
+
+                </td>
+            </tr>
+        </div>
+
+    </table>
+
+</body>
+</html>

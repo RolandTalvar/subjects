@@ -55,6 +55,11 @@
             </select></td>
         </tr>
 
+        <div th:replace="fragments/employeeRoles :: employeeRoles"></div>
+        <tr>
+            <td><a th:href="@{/subject/addNewEmployeeRole(id=${employee.employee})}">Add new employee role</a></td>
+        </tr>
+
         <tr>
             <td><label><h3>Main address</h3></label></td>
         </tr>

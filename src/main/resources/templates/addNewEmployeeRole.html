@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Add new employee role</title>
+</head>
+<body>
+<h1>Add new employee role</h1>
+
+<a th:href="@{/subject/editEmployee(id=${employee.employee})}"><h3 th:text="${person.firstName} + '  ' + ${person.lastName}"></h3></a>
+
+<form action="#" th:action="@{/subject/addNewEmployeeRole}" method="post">
+    <table>
+
+        <tr>
+            <td><label>Employee role</label></td>
+            <td>
+                <select th:field="${employeeRole.employeeRoleTypeFk}">
+                    <div>
+                        <option th:each="employeeRoleType, typeStat : ${employeeRoleTypeListWrapper.employeeRoleTypeList}"
+                                th:object="${employeeRoleTypeListWrapper.employeeRoleTypeList[__${typeStat.index}__]}"
+                                th:value="*{employeeRoleType}" th:text="*{typeName}"></option>
+                    </div>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Submit" /></td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>

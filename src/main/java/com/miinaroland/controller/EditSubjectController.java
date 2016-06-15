@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/subject")
-@SessionAttributes({"person", "address", "enterprise", "employee", "contactListWrapper", "subjectAttributeListWrapper", "customerAttributeListWrapper"})
+@SessionAttributes({"person", "address", "enterprise", "employee", "contactListWrapper", "subjectAttributeListWrapper", "customerAttributeListWrapper", "employeeRoleListWrapper"})
 public class EditSubjectController {
 
     private static final Logger logger = LoggerFactory.getLogger("subjectLogger");
@@ -59,6 +59,12 @@ public class EditSubjectController {
 
     @Autowired
     ContactRepository contactRepository;
+
+    @Autowired
+    EmployeeRoleRepository employeeRoleRepository;
+
+    @Autowired
+    EmployeeRoleTypeRepository employeeRoleTypeRepository;
 
 
     @RequestMapping(value = "/editPerson", method = RequestMethod.GET, params = "id")
@@ -372,6 +378,16 @@ public class EditSubjectController {
         contactTypeListWrapper.setContactTypeList(contactTypes);
         model.addAttribute(contactTypeListWrapper);
 
+        List<EmployeeRole> employeeRoles = employeeRoleRepository.findByEmployeeFk(id);
+        EmployeeRoleListWrapper employeeRoleListWrapper = new EmployeeRoleListWrapper();
+        employeeRoleListWrapper.setEmployeeRoleList(employeeRoles);
+        model.addAttribute(employeeRoleListWrapper);
+
+        List<EmployeeRoleType> employeeRoleTypes = employeeRoleTypeRepository.findAll();
+        EmployeeRoleTypeListWrapper employeeRoleTypeListWrapper = new EmployeeRoleTypeListWrapper();
+        employeeRoleTypeListWrapper.setEmployeeRoleTypeList(employeeRoleTypes);
+        model.addAttribute(employeeRoleTypeListWrapper);
+
         List<SubjectAttributeType> subjectAttributeTypeList = subjectAttributeTypeRepository.findBySubjectTypeFk(subjectType);
         SubjectAttributeTypeListWrapper subjectAttributeTypeListWrapper = new SubjectAttributeTypeListWrapper();
         subjectAttributeTypeListWrapper.setSubjectAttributeTypeList(subjectAttributeTypeList);
@@ -394,6 +410,7 @@ public class EditSubjectController {
                                        @ModelAttribute("address") Address address,
                                        @ModelAttribute("contactListWrapper") ContactListWrapper contactListWrapper,
                                        @ModelAttribute("subjectAttributeListWrapper") SubjectAttributeListWrapper subjectAttributeListWrapper,
+                                       @ModelAttribute("employeeRoleListWrapper") EmployeeRoleListWrapper employeeRoleListWrapper,
                                        @RequestParam(required = false, value = "selectedEnterprise") Long selectedEnterprise,
                                        @RequestParam(required = false, value = "selectedStructUnit") Long selectedStructUnit) {
 
@@ -421,6 +438,10 @@ public class EditSubjectController {
 
         for (SubjectAttribute subjectAttribute: subjectAttributeListWrapper.getSubjectAttributeList()) {
             subjectAttributeRepository.save(subjectAttribute);
+        }
+
+        for (EmployeeRole employeeRole: employeeRoleListWrapper.getEmployeeRoleList()) {
+            employeeRoleRepository.save(employeeRole);
         }
 
         return "redirect:/subject/editEmployee?id=" + employee.getEmployee();
