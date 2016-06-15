@@ -135,29 +135,46 @@ public class EditSubjectController {
 
         addressRepository.save(address);
 
+        Customer customer = customerRepository.findBySubjectFkAndSubjectTypeFk(person.getPerson(), subjectType);
+        if (customer == null) {
+            customer = new Customer();
+        }
+
         if (isCustomer) {
-            Customer customer = new Customer();
             customer.setSubjectFk(person.getPerson());
             customer.setSubjectTypeFk(subjectType);
             customerRepository.save(customer);
         }
 
-        if (contactListWrapper != null) {
+        if (contactListWrapper != null && contactListWrapper.getContactList() != null) {
             for (Contact contact: contactListWrapper.getContactList()) {
                 contactDAO.insertOrUpdate(contact);
             }
         }
 
 
-        if (subjectAttributeListWrapper != null) {
+        if (subjectAttributeListWrapper != null && subjectAttributeListWrapper.getSubjectAttributeList() != null) {
             for (SubjectAttribute subjectAttribute: subjectAttributeListWrapper.getSubjectAttributeList()) {
                 subjectAttributeRepository.save(subjectAttribute);
             }
         }
 
 
-        if (customerAttributeListWrapper != null) {
+        if (customerAttributeListWrapper != null && customerAttributeListWrapper.getCustomerAttributeList() != null) {
             for (SubjectAttribute subjectAttribute: customerAttributeListWrapper.getCustomerAttributeList()) {
+                subjectAttributeRepository.save(subjectAttribute);
+            }
+        } else if (isCustomer) {
+
+            List<SubjectAttributeType> subjectAttributeTypeList = subjectAttributeTypeRepository.findBySubjectTypeFk(4L);
+
+            for (SubjectAttributeType type : subjectAttributeTypeList) {
+                SubjectAttribute subjectAttribute = new SubjectAttribute();
+                subjectAttribute.setSubjectFk(customer.getCustomer());
+                subjectAttribute.setSubjectTypeFk(4L);
+                subjectAttribute.setSubjectAttributeTypeFk(type.getSubjectAttributeType());
+                subjectAttribute.setOrderby(type.getOrderby());
+                subjectAttribute.setDataType(type.getDataType());
                 subjectAttributeRepository.save(subjectAttribute);
             }
         }
@@ -252,8 +269,12 @@ public class EditSubjectController {
 
         addressRepository.save(address);
 
+        Customer customer = customerRepository.findBySubjectFkAndSubjectTypeFk(enterprise.getEnterprise(), subjectType);
+        if (customer == null) {
+            customer = new Customer();
+        }
+
         if (isCustomer) {
-            Customer customer = new Customer();
             customer.setSubjectFk(enterprise.getEnterprise());
             customer.setSubjectTypeFk(subjectType);
             customerRepository.save(customer);
@@ -273,6 +294,20 @@ public class EditSubjectController {
 
         if (customerAttributeListWrapper != null && customerAttributeListWrapper.getCustomerAttributeList() != null) {
             for (SubjectAttribute subjectAttribute: customerAttributeListWrapper.getCustomerAttributeList()) {
+                subjectAttributeRepository.save(subjectAttribute);
+            }
+        } else if (isCustomer) {
+
+            List<SubjectAttributeType> subjectAttributeTypeList = subjectAttributeTypeRepository.findBySubjectTypeFk(4L);
+
+
+            for (SubjectAttributeType type : subjectAttributeTypeList) {
+                SubjectAttribute subjectAttribute = new SubjectAttribute();
+                subjectAttribute.setSubjectTypeFk(4L);
+                subjectAttribute.setSubjectFk(customer.getCustomer());
+                subjectAttribute.setSubjectAttributeTypeFk(type.getSubjectAttributeType());
+                subjectAttribute.setOrderby(type.getOrderby());
+                subjectAttribute.setDataType(type.getDataType());
                 subjectAttributeRepository.save(subjectAttribute);
             }
         }

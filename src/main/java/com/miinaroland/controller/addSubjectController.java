@@ -1,5 +1,6 @@
 package com.miinaroland.controller;
 
+import com.miinaroland.dao.ContactDAO;
 import com.miinaroland.model.*;
 import com.miinaroland.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,18 @@ public class AddSubjectController {
 
     @Autowired
     StructUnitRepository structUnitRepository;
+
+    @Autowired
+    ContactRepository contactRepository;
+
+    @Autowired
+    SubjectAttributeTypeRepository subjectAttributeTypeRepository;
+
+    @Autowired
+    ContactDAO contactDAO;
+
+    @Autowired
+    SubjectAttributeRepository subjectAttributeRepository;
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String getSubjectAddForm(@ModelAttribute SubjectType subjectType, Model model) {
@@ -81,6 +94,35 @@ public class AddSubjectController {
 
         addressRepository.save(address);
 
+        long lastId = contactDAO.getLastId();
+        Contact contact = new Contact();
+        contact.setContact(lastId + 1);
+        contact.setSubjectFk(person.getPerson());
+        contact.setSubjectTypeFk(1L);
+        contact.setOrderby(1L);
+        contact.setContactTypeFk(1L);
+        contactRepository.save(contact);
+
+        Contact contact2 = new Contact();
+        contact2.setContact(lastId + 2);
+        contact2.setSubjectFk(person.getPerson());
+        contact2.setSubjectTypeFk(1L);
+        contact2.setOrderby(1L);
+        contact2.setContactTypeFk(2L);
+        contactRepository.save(contact2);
+
+        List<SubjectAttributeType> subjectAttributeTypeList = subjectAttributeTypeRepository.findBySubjectTypeFk(1L);
+
+        for (SubjectAttributeType type : subjectAttributeTypeList) {
+            SubjectAttribute subjectAttribute = new SubjectAttribute();
+            subjectAttribute.setSubjectFk(person.getPerson());
+            subjectAttribute.setSubjectTypeFk(1L);
+            subjectAttribute.setSubjectAttributeTypeFk(type.getSubjectAttributeType());
+            subjectAttribute.setOrderby(type.getOrderby());
+            subjectAttribute.setDataType(type.getDataType());
+            subjectAttributeRepository.save(subjectAttribute);
+        }
+
         return "redirect:/subject/editPerson?id=" + person.getPerson();
 
 
@@ -107,6 +149,35 @@ public class AddSubjectController {
         address.setAddressTypeFk(3L);
 
         addressRepository.save(address);
+
+        long lastId = contactDAO.getLastId();
+        Contact contact = new Contact();
+        contact.setContact(lastId + 1);
+        contact.setSubjectFk(enterprise.getEnterprise());
+        contact.setSubjectTypeFk(2L);
+        contact.setOrderby(1L);
+        contact.setContactTypeFk(1L);
+        contactRepository.save(contact);
+
+        Contact contact2 = new Contact();
+        contact2.setContact(lastId + 2);
+        contact2.setSubjectFk(enterprise.getEnterprise());
+        contact2.setSubjectTypeFk(2L);
+        contact2.setOrderby(1L);
+        contact2.setContactTypeFk(2L);
+        contactRepository.save(contact2);
+
+        List<SubjectAttributeType> subjectAttributeTypeList = subjectAttributeTypeRepository.findBySubjectTypeFk(2L);
+
+        for (SubjectAttributeType type : subjectAttributeTypeList) {
+            SubjectAttribute subjectAttribute = new SubjectAttribute();
+            subjectAttribute.setSubjectFk(enterprise.getEnterprise());
+            subjectAttribute.setSubjectTypeFk(2L);
+            subjectAttribute.setSubjectAttributeTypeFk(type.getSubjectAttributeType());
+            subjectAttribute.setOrderby(type.getOrderby());
+            subjectAttribute.setDataType(type.getDataType());
+            subjectAttributeRepository.save(subjectAttribute);
+        }
 
         return "redirect:/subject/editEnterprise?id=" + enterprise.getEnterprise();
 
@@ -144,11 +215,40 @@ public class AddSubjectController {
 
         employeeRepository.save(employee);
 
-        address.setSubjectFk(employee.getEmployee());
-        address.setSubjectTypeFk(3L);
+        address.setSubjectFk(person.getPerson());
+        address.setSubjectTypeFk(1L);
         address.setAddressTypeFk(1L);
 
         addressRepository.save(address);
+
+        long lastId = contactDAO.getLastId();
+        Contact contact = new Contact();
+        contact.setContact(lastId + 1);
+        contact.setSubjectFk(employee.getPersonFk());
+        contact.setSubjectTypeFk(1L);
+        contact.setOrderby(1L);
+        contact.setContactTypeFk(1L);
+        contactRepository.save(contact);
+
+        Contact contact2 = new Contact();
+        contact2.setContact(lastId + 2);
+        contact2.setSubjectFk(employee.getPersonFk());
+        contact2.setSubjectTypeFk(1L);
+        contact2.setOrderby(1L);
+        contact2.setContactTypeFk(2L);
+        contactRepository.save(contact2);
+
+        List<SubjectAttributeType> subjectAttributeTypeList = subjectAttributeTypeRepository.findBySubjectTypeFk(3L);
+
+        for (SubjectAttributeType type : subjectAttributeTypeList) {
+            SubjectAttribute subjectAttribute = new SubjectAttribute();
+            subjectAttribute.setSubjectFk(employee.getEmployee());
+            subjectAttribute.setSubjectTypeFk(3L);
+            subjectAttribute.setSubjectAttributeTypeFk(type.getSubjectAttributeType());
+            subjectAttribute.setOrderby(type.getOrderby());
+            subjectAttribute.setDataType(type.getDataType());
+            subjectAttributeRepository.save(subjectAttribute);
+        }
 
         return "redirect:/subject/editEmployee?id=" + employee.getEmployee();
 

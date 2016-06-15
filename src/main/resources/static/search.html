@@ -14,15 +14,16 @@
 
     <title>Subject Search</title>
 </head>
-<body ng-app="searchApp" ng-controller="searchController">
+<body ng-app="searchApp" ng-controller="searchController" style="margin:20px;">
 
-<h3>Search</h3>
+<div align="center">
+<h1>Search</h1>
 <br />
 <br />
 <br />
 
 <p>Subject Type:
-    <select ng-model="searchType" ng-init="searchType = 'all'">
+    <select ng-model="searchType" ng-init="searchType = 'all'" ng-change="clearSearchResults()">
         <option value="all">All</option>
         <option value="person">Person</option>
         <option value="enterprise">Enterprise</option>
@@ -32,26 +33,103 @@
 </p>
 <br />
 
-<form>
-    First Name: <input placeholder="First name..." ng-model="search.firstName" ng-disabled="saving" /><br /><br />
-    Last Name: <input placeholder="Last name..." ng-model="search.lastName" ng-disabled="saving" /><br /><br />
-    Identity Code: <input placeholder="Identity Code..." ng-model="search.identityCode" ng-disabled="saving" /><br /><br />
-    Birth Date: <input class="form-control" placeholder="yyyy-mm-dd" type="text" name="birthDate" ng-model="search.birthDate"/><br /><br />
-    <input type="submit" ng-click="search()" value="Search" readonly='true'/><br /><br /><br />
-</form>
+<table class="table table-sm" style="width:500px;">
+
+
+    <tr data-ng-show="searchType == 'person'"><td><h3>Person Search</h3></td><td></td></tr>
+    <tr data-ng-show="searchType == 'enterprise'"><td><h3>Enterprise Search</h3></td><td></td></tr>
+    <tr data-ng-show="searchType == 'employee'"><td><h3>Employee Search</h3></td><td></td></tr>
+    <tr data-ng-show="searchType == 'customer'"><td><h3>Customer Search</h3></td><td></td></tr>
+    <tr data-ng-show="searchType == 'all'"><td><h3>Subject Search</h3></td><td></td></tr>
+
+    <tr data-ng-show="searchType != 'enterprise'"><td>First Name:</td> <td><input ng-model="search.firstName" ng-disabled="saving" /></td></tr>
+    <tr><td>Name:</td> <td><input ng-model="search.lastName"  /></td></tr>
+    <tr data-ng-show="searchType != 'enterprise' && searchType != 'all'"><td>Identity Code:</td> <td><input ng-model="search.identityCode" ng-disabled="saving" /></td></tr>
+    <tr data-ng-show="searchType != 'enterprise' && searchType != 'all'"><td>Birth Date:</td> <td><input class="form-control" placeholder="yyyy-mm-dd" type="text" name="birthDate" ng-model="search.birthDate"/></td></tr>
+
+    <tr><td><h3>Address</h3></td><td></td></tr>
+    <tr><td>Country:</td> <td><input type="text" ng-model="search.country"/></td></tr>
+    <tr><td>County:</td> <td><input type="text" ng-model="search.county"/></td></tr>
+    <tr><td>Town/Village:</td> <td><input type="text" ng-model="search.townVillage"/></td></tr>
+    <tr><td>Street Address:</td> <td><input type="text" ng-model="search.streetAddress"/></td></tr>
+    <tr><td>Zipcode:</td> <td><input type="text" ng-model="search.zipcode"/></td></tr>
+
+    <tr><td><h3>Contact</h3></td><td></td></tr>
+    <tr><td>Contact textual value:</td> <td><input type="text" ng-model="search.contactValueText"/></td></tr>
+
+    <tr><td><h3>Subject attributes</h3></td><td></td></tr>
+    <tr><td>Attribute textual value:</td> <td><input type="text" ng-model="search.attributeValueText"/></td></tr>
+    <tr><td>Attribute numeric value:</td> <td><input type="text" ng-model="search.attributeValueNumber"/></td></tr>
+    <tr><td>Attribute date value:</td> <td><input class="form-control" placeholder="yyyy-mm-dd" type="text" name="attributeValueDate" ng-model="search.attributeValueDate"/></td></tr>
+
+
+</table>
+
+<input type="button" ng-click="search()" value="Search" readonly='true'/><br /><br /><br />
+
+</div>
 
 <table class="table table-hover">
     <thead>
+    <th>Subject type</th>
     <th>First Name</th>
     <th>Name</th>
     <th>Identity Code</th>
     <th>Birth Date</th>
+    <th>Country</th>
+    <th>County</th>
+    <th>Town/Village</th>
+    <th>Street Address</th>
+    <th>Zipcode</th>
     </thead>
-    <tr ng-repeat="subject in subjects | orderBy:'id'">
+    <tr ng-repeat="subject in personList | orderBy:'id'" data-ng-click="editSubject(subject.subjectType, subject.id);">
+        <td>Person</td>
         <td>{{ subject.firstName }}</td>
         <td>{{ subject.lastName }}</td>
         <td>{{ subject.identityCode }}</td>
         <td>{{ subject.birthDate }}</td>
+        <td>{{ subject.country }}</td>
+        <td>{{ subject.county }}</td>
+        <td>{{ subject.townVillage }}</td>
+        <td>{{ subject.streetAddress }}</td>
+        <td>{{ subject.zipcode }}</td>
+    </tr>
+    <tr ng-repeat="subject in enterpriseList | orderBy:'id'" data-ng-click="editSubject(subject.subjectType, subject.id);">
+        <td>Enterprise</td>
+        <td>{{ subject.firstName }}</td>
+        <td>{{ subject.lastName }}</td>
+        <td>{{ subject.identityCode }}</td>
+        <td>{{ subject.birthDate }}</td>
+        <td>{{ subject.country }}</td>
+        <td>{{ subject.county }}</td>
+        <td>{{ subject.townVillage }}</td>
+        <td>{{ subject.streetAddress }}</td>
+        <td>{{ subject.zipcode }}</td>
+    </tr>
+    <tr ng-repeat="subject in employeeList | orderBy:'id'" data-ng-click="editSubject(subject.subjectType, subject.id);">
+        <td>Employee</td>
+        <td>{{ subject.firstName }}</td>
+        <td>{{ subject.lastName }}</td>
+        <td>{{ subject.identityCode }}</td>
+        <td>{{ subject.birthDate }}</td>
+        <td>{{ subject.country }}</td>
+        <td>{{ subject.county }}</td>
+        <td>{{ subject.townVillage }}</td>
+        <td>{{ subject.streetAddress }}</td>
+        <td>{{ subject.zipcode }}</td>
+    </tr>
+    <tr ng-repeat="subject in customerList | orderBy:'id'" data-ng-click="editSubject(subject.subjectType, subject.id);">
+        <td data-ng-show="subject.subjectType == 1">Customer(Person)</td>
+        <td data-ng-show="subject.subjectType == 2">Customer(Enterprise)</td>
+        <td>{{ subject.firstName }}</td>
+        <td>{{ subject.lastName }}</td>
+        <td>{{ subject.identityCode }}</td>
+        <td>{{ subject.birthDate }}</td>
+        <td>{{ subject.country }}</td>
+        <td>{{ subject.county }}</td>
+        <td>{{ subject.townVillage }}</td>
+        <td>{{ subject.streetAddress }}</td>
+        <td>{{ subject.zipcode }}</td>
     </tr>
 </table>
 
