@@ -3,6 +3,8 @@ package com.miinaroland.controller;
 import com.miinaroland.dao.ContactDAO;
 import com.miinaroland.model.*;
 import com.miinaroland.repository.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/subject")
 public class AddSubjectController {
+
+    private static final Logger logger = LoggerFactory.getLogger("subjectLogger");
 
     @Autowired
     SubjectTypeRepository subjectTypeRepository;
@@ -75,6 +79,8 @@ public class AddSubjectController {
     @RequestMapping(value = "/addPerson", method = RequestMethod.GET)
     public String getPersonAddForm(@ModelAttribute Person person, @ModelAttribute Address address) {
 
+        logger.info("Getting add person form");
+
         return "addPerson";
 
 
@@ -82,6 +88,8 @@ public class AddSubjectController {
 
     @RequestMapping(value = "/addPerson", method = RequestMethod.POST)
     public String postPersonAddForm(@ModelAttribute Person person, @ModelAttribute Address address) {
+
+        logger.info("Posting add person form");
 
         person.setCreated(new java.sql.Timestamp(new java.util.Date().getTime()));
         person.setUpdated(new java.sql.Timestamp(new java.util.Date().getTime()));
@@ -131,6 +139,8 @@ public class AddSubjectController {
     @RequestMapping(value = "/addEnterprise", method = RequestMethod.GET)
     public String getEnterpriseAddForm(@ModelAttribute Enterprise enterprise, @ModelAttribute Address address) {
 
+        logger.info("Getting add enterprise form");
+
         return "addEnterprise";
 
 
@@ -138,6 +148,8 @@ public class AddSubjectController {
 
     @RequestMapping(value = "/addEnterprise", method = RequestMethod.POST)
     public String postEnterpriseAddForm(@ModelAttribute Enterprise enterprise, @ModelAttribute Address address) {
+
+        logger.info("Posting add enterprise form");
 
         enterprise.setCreated(new java.sql.Timestamp(new java.util.Date().getTime()));
         enterprise.setUpdated(new java.sql.Timestamp(new java.util.Date().getTime()));
@@ -188,6 +200,8 @@ public class AddSubjectController {
     public String getEmployeeAddForm(@ModelAttribute Person person, @ModelAttribute Employee employee, @ModelAttribute Address address,
                                      @ModelAttribute Enterprise enterprise, @ModelAttribute StructUnit structUnit, Model model) {
 
+        logger.info("Getting add employee form");
+
         List<Enterprise> enterprises = enterpriseRepository.findAll();
         model.addAttribute("enterprises", enterprises);
 
@@ -202,6 +216,8 @@ public class AddSubjectController {
     @RequestMapping(value = "/addEmployee", method = RequestMethod.POST)
     public String postEmployeeAddForm(@ModelAttribute Person person, @ModelAttribute Employee employee, @ModelAttribute Address address,
                                       @ModelAttribute Enterprise enterprise, @ModelAttribute StructUnit structUnit) {
+
+        logger.info("Posting add employee form");
 
         person.setCreated(new java.sql.Timestamp(new java.util.Date().getTime()));
         person.setUpdated(new java.sql.Timestamp(new java.util.Date().getTime()));
