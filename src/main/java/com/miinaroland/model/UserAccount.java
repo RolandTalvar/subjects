@@ -1,16 +1,17 @@
 package com.miinaroland.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
- * Created by rolandtalvar on 02/06/16.
+ * Created by miinaroland on 02/06/16.
  */
 @Entity
 public class UserAccount {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_account_id")
+    @SequenceGenerator(name="user_account_id", sequenceName="user_account_id", allocationSize=1)
     private long userAccount;
     private Long subjectTypeFk;
     private Long subjectFk;

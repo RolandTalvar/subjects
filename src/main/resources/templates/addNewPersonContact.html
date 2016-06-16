@@ -4,6 +4,9 @@
     <title>Add new person contact</title>
 </head>
 <body>
+
+<div th:replace="fragments/links :: links"></div>
+
 <h1>Add new person contact</h1>
 
 <a th:href="@{/subject/editPerson(id=${person.person})}"><h3 th:text="${person.firstName} + '  ' + ${person.lastName}"></h3></a>

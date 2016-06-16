@@ -4,6 +4,9 @@
     <title>Edit additional employee address</title>
 </head>
 <body>
+
+<div th:replace="fragments/links :: links"></div>
+
 <h1>Edit additional employee address</h1>
 
 <a th:href="@{/subject/editEmployee(id=${employee.employee})}"><h3 th:text="${person.firstName} + '  ' + ${person.lastName}"></h3></a>

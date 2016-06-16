@@ -4,6 +4,9 @@
     <title>Add additional enterprise address</title>
 </head>
 <body>
+
+<div th:replace="fragments/links :: links"></div>
+
 <h1>Add additional enterprise address</h1>
 
 <a th:href="@{/subject/editEnterprise(id=${enterprise.enterprise})}"><h3 th:text="${enterprise.name}"></h3></a>

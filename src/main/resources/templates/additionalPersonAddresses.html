@@ -4,6 +4,9 @@
     <title>Additional person addresses</title>
 </head>
 <body>
+
+<div th:replace="fragments/links :: links"></div>
+
 <h1>Additional person addresses</h1>
 
 <a th:href="@{/subject/editPerson(id=${person.person})}"><h3 th:text="${person.firstName} + '  ' + ${person.lastName}"></h3></a>

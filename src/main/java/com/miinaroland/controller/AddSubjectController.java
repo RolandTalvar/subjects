@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.List;
 
 /**
- * Created by rolandtalvar on 02/06/16.
+ * Created by miinaroland on 02/06/16.
  */
 @Controller
 @RequestMapping("/subject")

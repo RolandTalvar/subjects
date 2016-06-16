@@ -3,7 +3,7 @@ package com.miinaroland.model;
 import java.sql.Date;
 
 /**
- * Created by rolandtalvar on 02/06/16.
+ * Created by miinaroland on 02/06/16.
  */
 
 public class SubjectSearchResult {

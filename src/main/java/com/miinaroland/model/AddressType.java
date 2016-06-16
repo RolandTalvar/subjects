@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 /**
- * Created by rolandtalvar on 02/06/16.
+ * Created by miinaroland on 02/06/16.
  */
 @Entity
 public class AddressType {

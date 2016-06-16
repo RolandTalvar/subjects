@@ -1,5 +1,5 @@
 /**
- * Created by rolandtalvar on 14/06/16.
+ * Created by miinaroland on 14/06/16.
  */
 $(document).ready(function(){
     var date_input=$('input[name="birthDate"]');

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Add new user account</title>
+</head>
+<body>
+
+<div th:replace="fragments/links :: links"></div>
+
+<h1>Add new user account</h1>
+
+<form action="#" th:action="@{/subject/addNewUserAccount}" method="post">
+    <table>
+
+        <tr>
+            <td><label>Employee</label></td>
+            <td>
+                <select th:field="${userAccount.subjectFk}">
+                    <div>
+                        <option th:each="employee, typeStat : ${employeeListWrapper.employeeList}"
+                                th:object="${employeeListWrapper.employeeList[__${typeStat.index}__]}"
+                                th:value="*{employee}" th:text="*{employee} + '. ' + *{firstName} + ' ' + *{lastName}"></option>
+                    </div>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label>Username</label></td>
+            <td><input type="text" th:field="*{userAccount.username}" /></td>
+        </tr>
+        <tr>
+            <td><label>Password</label></td>
+            <td><input type="password" th:field="*{userAccount.passw}" /></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Submit" /></td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>

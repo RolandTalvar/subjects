@@ -3,7 +3,7 @@ package com.miinaroland.model;
 import java.util.List;
 
 /**
- * Created by rolandtalvar on 06/06/16.
+ * Created by miinaroland on 06/06/16.
  */
 public class EmployeeRoleTypeListWrapper {
 
