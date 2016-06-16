@@ -2,6 +2,9 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title>Edit enterprise</title>
+
+    <!--  jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 </head>
 <body>
 
@@ -57,6 +60,11 @@
             <td><a th:href="@{/subject/addNewEnterpriseContact(id=${enterprise.enterprise})}">Add new contact</a></td>
         </tr>
 
+        <div th:replace="fragments/relatedPerson :: relatedPerson"></div>
+        <tr>
+            <td><a th:href="@{/subject/addNewEnterpriseRelatedPerson}">Add new enterprise person relation</a></td>
+        </tr>
+
         <tr>
             <td><label><h3>Enterprise attributes</h3></label></td>
         </tr>
@@ -102,6 +110,27 @@
         </tr>
     </table>
 </form>
+
+<script th:inline="javascript">
+
+    /*<![CDATA[*/
+
+    var deletePerson = function(id) {
+        $("#"+id).remove();
+        $.ajax({
+            url: 'http://localhost:8080/subject/search/removeEnterprisePersonRelation/' + id,
+            type: 'GET',
+//            data: id, //<-----this should have to be an object.
+            contentType:'text/html'  // <---add this
+//            dataType: 'text',                // <---update this
+//            success: function(result) {...},
+//            error: function(result){...}
+        });
+
+    };
+
+    /*]]>*/
+</script>
 
 </body>
 </html>

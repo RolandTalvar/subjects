@@ -66,6 +66,12 @@ public class EditSubjectController {
     @Autowired
     EmployeeRoleTypeRepository employeeRoleTypeRepository;
 
+    @Autowired
+    EnterprisePersonRelationRepository enterprisePersonRelationRepository;
+
+    @Autowired
+    EntPerRelationTypeRepository entPerRelationTypeRepository;
+
 
     @RequestMapping(value = "/editPerson", method = RequestMethod.GET, params = "id")
     public String getPersonEditForm(@RequestParam("id") long id, Model model) {
@@ -265,6 +271,27 @@ public class EditSubjectController {
 
         model.addAttribute("customerAttributeTypeListWrapper", customerAttributeTypeListWrapper);
         model.addAttribute("customerAttributeListWrapper", customerAttributeListWrapper);
+
+
+        List<PersonRelation> personRelationList = new ArrayList<>();
+        List<EnterprisePersonRelation> enterprisePersonRelationList = enterprisePersonRelationRepository.findByEnterpriseFk(id);
+        for (EnterprisePersonRelation enterprisePersonRelation: enterprisePersonRelationList) {
+            Person person = personRepository.findByPerson(enterprisePersonRelation.getPersonFk());
+            PersonRelation personRelation = new PersonRelation();
+            personRelation.setFirstName(person.getFirstName());
+            personRelation.setLastName(person.getLastName());
+
+            EntPerRelationType entPerRelationType = entPerRelationTypeRepository.findOne(enterprisePersonRelation.getEntPerRelationTypeFk());
+            personRelation.setRelationTypeName(entPerRelationType.getTypeName());
+            personRelation.setId(enterprisePersonRelation.getEnterprisePersonRelation());
+
+            personRelationList.add(personRelation);
+        }
+
+        PersonRelationListWrapper personRelationListWrapper = new PersonRelationListWrapper();
+        personRelationListWrapper.setPersonRelationList(personRelationList);
+        model.addAttribute(personRelationListWrapper);
+
 
         return "editEnterprise";
 

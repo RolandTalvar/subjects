@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Related Person</title>
+
+</head>
+<body>
+<h1>Related Person</h1>
+
+    <table>
+
+        <div th:fragment="relatedPerson">
+            <tr>
+                <td><label><h3>Related People</h3></label></td>
+            </tr>
+            <tr th:each="personRelation, stat : ${personRelationListWrapper.personRelationList}" th:id="${personRelationListWrapper.personRelationList[__${stat.index}__].id}">
+                <td><input style=" border:none; background: transparent;" readonly="readonly" type="text" th:field="*{personRelationListWrapper.personRelationList[__${stat.index}__].firstName}" /></td>
+                <td><input style=" border:none; background: transparent;" readonly="readonly" type="text" th:field="*{personRelationListWrapper.personRelationList[__${stat.index}__].lastName}" /></td>
+                <td><input style=" border:none; background: transparent;" readonly="readonly" type="text" th:field="*{personRelationListWrapper.personRelationList[__${stat.index}__].relationTypeName}" /></td>
+                <td><button th:onclick="${'deletePerson(' + personRelationListWrapper.personRelationList[__${stat.index}__].id + ')' }">Delete</button></td>
+            </tr>
+        </div>
+
+    </table>
+
+</body>
+</html>

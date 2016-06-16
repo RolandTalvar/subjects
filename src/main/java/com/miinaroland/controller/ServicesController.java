@@ -8,10 +8,7 @@ import com.miinaroland.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +42,9 @@ public class ServicesController {
     @Autowired
     StructUnitRepository structUnitRepository;
 
+    @Autowired
+    EnterprisePersonRelationRepository enterprisePersonRelationRepository;
+
     private static final Logger logger = LoggerFactory.getLogger("subjectLogger");
 
     @RequestMapping(value = "structureUnits", method = RequestMethod.GET)
@@ -55,6 +55,15 @@ public class ServicesController {
         List<StructUnit> structUnitList = structUnitRepository.findByEnterpriseFk(enterpriseID);
         Gson gson = new Gson();
         return gson.toJson(structUnitList);
+    }
+
+    @RequestMapping(value = "removeEnterprisePersonRelation/{id:\\d+}", method = RequestMethod.GET)
+    public @ResponseBody void removeEnterprisePersonRelation(@PathVariable("id") long id) {
+
+        logger.info("Deleting Enterprise Person Relation...");
+
+        enterprisePersonRelationRepository.delete(id);
+
     }
 
     @RequestMapping(value = "/person", method = RequestMethod.GET)

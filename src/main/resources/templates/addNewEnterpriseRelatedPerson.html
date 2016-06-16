@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Add new enteprise person relation</title>
+</head>
+<body>
+
+<div th:replace="fragments/links :: links"></div>
+
+<h1>Add new enteprise person relation</h1>
+
+<a th:href="@{/subject/editEnterprise(id=${enterprise.enterprise})}"><h3 th:text="${enterprise.name}"></h3></a>
+
+<form action="#" th:action="@{/subject/addNewEnterpriseRelatedPerson}" method="post">
+    <table>
+
+        <tr>
+            <td><label>Enteprise person relation</label></td>
+            <td>
+                <select th:field="${enterprisePersonRelation.personFk}">
+                    <div>
+                        <option th:each="person, typeStat : ${personListWrapper.personList}"
+                                th:object="${personListWrapper.personList[__${typeStat.index}__]}"
+                                th:value="*{person}" th:text="*{firstName + ' ' + lastName}"></option>
+                    </div>
+                </select>
+            </td>
+            <td>
+                <select th:field="${enterprisePersonRelation.entPerRelationTypeFk}">
+                    <div>
+                        <option th:each="entPerRelationType, typeStat : ${entPerRelationTypeListWrapper.entPerRelationTypeList}"
+                                th:object="${entPerRelationTypeListWrapper.entPerRelationTypeList[__${typeStat.index}__]}"
+                                th:value="*{entPerRelationType}" th:text="*{typeName}"></option>
+                    </div>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Submit" /></td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>
