@@ -1,5 +1,6 @@
 package com.miinaroland.controller;
 
+import com.miinaroland.Service.PersonValidator;
 import com.miinaroland.dao.ContactDAO;
 import com.miinaroland.model.*;
 import com.miinaroland.repository.*;
@@ -8,10 +9,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -22,6 +25,9 @@ import java.util.List;
 public class AddSubjectController {
 
     private static final Logger logger = LoggerFactory.getLogger("subjectLogger");
+
+    @Autowired
+    PersonValidator personValidator;
 
     @Autowired
     SubjectTypeRepository subjectTypeRepository;
@@ -87,7 +93,19 @@ public class AddSubjectController {
     }
 
     @RequestMapping(value = "/addPerson", method = RequestMethod.POST)
-    public String postPersonAddForm(@ModelAttribute Person person, @ModelAttribute Address address) {
+    public String postPersonAddForm(@ModelAttribute @Valid Person person, BindingResult bindingResult, @ModelAttribute Address address) {
+
+
+
+        if (bindingResult.hasErrors()) {
+            return "addPerson";
+        }
+
+//        personValidator.validate(person, bindingResult);
+
+//        if (bindingResult.hasErrors()) {
+//            return "addPerson";
+//        }
 
         logger.info("Posting add person form");
 

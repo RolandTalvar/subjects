@@ -1,6 +1,8 @@
 package com.miinaroland.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -13,9 +15,16 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "person_id")
     @SequenceGenerator(name="person_id", sequenceName="person_id", allocationSize=1)
     private long person;
+
+    @Size(min=2, max=30)
     private String firstName;
+
+    @Size(min=2, max=30)
     private String lastName;
+
+    @Pattern(regexp="^[3-6][0-9][0-9][0-1][0-9][0-3][0-9][0-9][0-9][0-9][0-9]$",message="Invalid identity code format")
     private String identityCode;
+
     private java.sql.Date birthDate;
     private Long createdBy;
     private Long updatedBy;

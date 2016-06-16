@@ -26,18 +26,22 @@
         <tr>
             <td><label>First Name</label></td>
             <td><input type="text" th:field="*{person.firstName}" /></td>
+            <td th:if="${#fields.hasErrors('person.firstName')}" th:errors="*{person.firstName}">First Name Error</td>
         </tr>
         <tr>
             <td><label>Last name</label></td>
             <td><input type="text" th:field="*{person.lastName}" /></td>
+            <td th:if="${#fields.hasErrors('person.lastName')}" th:errors="*{person.lastName}">Last Name Error</td>
         </tr>
         <tr>
             <td><label>Identity code</label></td>
             <td><input type="text" th:field="*{person.identityCode}" /></td>
+            <td th:if="${#fields.hasErrors('person.identityCode')}" th:errors="*{person.identityCode}">Identity Code Error</td>
         </tr>
         <tr>
             <td><label>Birth Date</label></td>
             <td><input class="form-control" placeholder="yyyy-mm-dd" type="text" th:field="*{person.birthDate}"/></td>
+            <td th:if="${#fields.hasErrors('person.birthDate')}" th:errors="*{person.birthDate}">Birth Date Error</td>
         </tr>
         <tr>
             <td><label><h3>Main address</h3></label></td>
